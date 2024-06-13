@@ -45,6 +45,8 @@ public class CECycleScrollView: UIView {
     private var totalItemsCount: Int = 0
     /// 滚动定时器
     private var timer: Timer?
+    /// 翻倍数
+    private let multiple: Int = 100
 
     // MARK: - Life Cycle
     /// 实例化轮播视图
@@ -171,7 +173,7 @@ extension CECycleScrollView {
     private func configNumberOfItems() {
         invalidateTimer()
         // 配置列表滚动值: 如果无限轮播，滚动值翻100倍，否则为原数值
-        totalItemsCount = infiniteLoop ? numberOfItems * 100 : numberOfItems
+        totalItemsCount = infiniteLoop ? numberOfItems * multiple : numberOfItems
         if numberOfItems > 1 {
             // 原数值大于1，开始轮播
             mainView.isScrollEnabled = true
@@ -224,6 +226,13 @@ extension CECycleScrollView {
         if numberOfItems == 0 { return 0 }
         return currentIndex % numberOfItems
     }
+    
+    /// 手动滑动处理无限轮播下标
+    private func manualInfiniteLoopWith(index: Int) {
+        let targetIndex = totalItemsCount / 2 + index
+        let indexPath = IndexPath(row: targetIndex, section: 0)
+        mainView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+    }
 }
 
 // MARK: - UICollectionViewDataSource, UICollectionViewDelegate
@@ -272,6 +281,11 @@ extension CECycleScrollView: UICollectionViewDelegate {
         let pageIndex = pageControlIndexWith(currentIndex: itemIndex)
         if let delegate = self.delegate {
             delegate.cycleScrollView(cycleScrollView: self, didScrollToIndex: pageIndex)
+        }
+        if !autoScroll,
+           infiniteLoop {
+            // 非自动滚动 && 无限轮播，处理滚动下标
+            manualInfiniteLoopWith(index: pageIndex)
         }
     }
 }

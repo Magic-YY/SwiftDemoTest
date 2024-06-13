@@ -37,6 +37,7 @@ class ViewController: UIViewController {
     // MARK: - getter
     private lazy var cycleScrollView: CECycleScrollView = {
         let view = CECycleScrollView(frame: CGRect(x: 50, y: 200, width: 200, height: 300), numberOfItems: images.count, cellClass: CycleCollectionViewCell.self, delegate: self, autoScroll: false)
+        view.backgroundColor = .yellow
         return view
     }()
 }
