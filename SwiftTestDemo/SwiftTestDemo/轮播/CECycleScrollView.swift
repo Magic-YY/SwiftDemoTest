@@ -89,8 +89,8 @@ public class CECycleScrollView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        flowLayout.itemSize = self.frame.size;
-        mainView.frame = self.bounds;
+        flowLayout.itemSize = self.frame.size
+        mainView.frame = self.bounds
         
         if mainView.contentOffset.x == 0,
            totalItemsCount > 0 {
@@ -199,7 +199,7 @@ extension CECycleScrollView {
         if mainView.frame.size.width == 0 || mainView.frame.size.height == 0 {
             return 0
         }
-        let index = (mainView.contentOffset.x + flowLayout.itemSize.width * 0.5) / flowLayout.itemSize.width;
+        let index = (mainView.contentOffset.x + flowLayout.itemSize.width * 0.5) / flowLayout.itemSize.width
         return Int(max(0, index))
     }
     
