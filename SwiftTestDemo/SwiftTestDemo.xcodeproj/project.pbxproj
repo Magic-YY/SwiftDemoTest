@@ -19,6 +19,13 @@
 		D38BA1CC2C1A93E300346277 /* img4.png in Resources */ = {isa = PBXBuildFile; fileRef = D38BA1C82C1A93E300346277 /* img4.png */; };
 		D38BA1CD2C1A93E300346277 /* img1.png in Resources */ = {isa = PBXBuildFile; fileRef = D38BA1C92C1A93E300346277 /* img1.png */; };
 		D38BA1CF2C1AD6CB00346277 /* CycleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38BA1CE2C1AD6CB00346277 /* CycleCollectionViewCell.swift */; };
+		D3B225FC2D069BE6009130F6 /* ViewController+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B225FB2D069BE6009130F6 /* ViewController+Operation.swift */; };
+		D3B225FE2D069C5D009130F6 /* ViewController+Cycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */; };
+		D3B226002D06BFCD009130F6 /* ViewController+GroupTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B225FF2D06BFCD009130F6 /* ViewController+GroupTask.swift */; };
+		D3B226022D06C00A009130F6 /* ViewController+GCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B226012D06C00A009130F6 /* ViewController+GCD.swift */; };
+		D3E9C1402C6C5864007937D1 /* AViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C13F2C6C5864007937D1 /* AViewController.swift */; };
+		D3E9C1422C6C5875007937D1 /* BViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C1412C6C5875007937D1 /* BViewController.swift */; };
+		D3E9C1462C6C87AD007937D1 /* PresentViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C1452C6C87AD007937D1 /* PresentViewControllerAnimation.swift */; };
 		D3F36BDB2C0827C500400BE9 /* AsynchronousOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F36BDA2C0827C500400BE9 /* AsynchronousOperation.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +44,13 @@
 		D38BA1C82C1A93E300346277 /* img4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img4.png; sourceTree = "<group>"; };
 		D38BA1C92C1A93E300346277 /* img1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img1.png; sourceTree = "<group>"; };
 		D38BA1CE2C1AD6CB00346277 /* CycleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycleCollectionViewCell.swift; sourceTree = "<group>"; };
+		D3B225FB2D069BE6009130F6 /* ViewController+Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Operation.swift"; sourceTree = "<group>"; };
+		D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Cycle.swift"; sourceTree = "<group>"; };
+		D3B225FF2D06BFCD009130F6 /* ViewController+GroupTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+GroupTask.swift"; sourceTree = "<group>"; };
+		D3B226012D06C00A009130F6 /* ViewController+GCD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+GCD.swift"; sourceTree = "<group>"; };
+		D3E9C13F2C6C5864007937D1 /* AViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AViewController.swift; sourceTree = "<group>"; };
+		D3E9C1412C6C5875007937D1 /* BViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BViewController.swift; sourceTree = "<group>"; };
+		D3E9C1452C6C87AD007937D1 /* PresentViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentViewControllerAnimation.swift; sourceTree = "<group>"; };
 		D3F36BDA2C0827C500400BE9 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsynchronousOperation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +84,7 @@
 		D37A86312BDDF63F000181B8 /* SwiftTestDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D3E9C13E2C6C584F007937D1 /* Animation */,
 				D38BA1C32C1A852A00346277 /* 轮播 */,
 				D3F36BD92C08271400400BE9 /* Operation */,
 				D37A86322BDDF63F000181B8 /* AppDelegate.swift */,
@@ -92,14 +107,28 @@
 				D38BA1C82C1A93E300346277 /* img4.png */,
 				D38BA1C42C1A85C000346277 /* CECycleScrollView.swift */,
 				D38BA1CE2C1AD6CB00346277 /* CycleCollectionViewCell.swift */,
+				D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */,
 			);
 			path = "轮播";
+			sourceTree = "<group>";
+		};
+		D3E9C13E2C6C584F007937D1 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				D3E9C13F2C6C5864007937D1 /* AViewController.swift */,
+				D3E9C1412C6C5875007937D1 /* BViewController.swift */,
+				D3E9C1452C6C87AD007937D1 /* PresentViewControllerAnimation.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		D3F36BD92C08271400400BE9 /* Operation */ = {
 			isa = PBXGroup;
 			children = (
+				D3B225FB2D069BE6009130F6 /* ViewController+Operation.swift */,
 				D3F36BDA2C0827C500400BE9 /* AsynchronousOperation.swift */,
+				D3B225FF2D06BFCD009130F6 /* ViewController+GroupTask.swift */,
+				D3B226012D06C00A009130F6 /* ViewController+GCD.swift */,
 			);
 			path = Operation;
 			sourceTree = "<group>";
@@ -179,11 +208,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3B226002D06BFCD009130F6 /* ViewController+GroupTask.swift in Sources */,
 				D37A86372BDDF63F000181B8 /* ViewController.swift in Sources */,
+				D3B226022D06C00A009130F6 /* ViewController+GCD.swift in Sources */,
+				D3E9C1422C6C5875007937D1 /* BViewController.swift in Sources */,
 				D38BA1CF2C1AD6CB00346277 /* CycleCollectionViewCell.swift in Sources */,
 				D38BA1C52C1A85C000346277 /* CECycleScrollView.swift in Sources */,
 				D37A86332BDDF63F000181B8 /* AppDelegate.swift in Sources */,
 				D37A86352BDDF63F000181B8 /* SceneDelegate.swift in Sources */,
+				D3B225FE2D069C5D009130F6 /* ViewController+Cycle.swift in Sources */,
+				D3E9C1402C6C5864007937D1 /* AViewController.swift in Sources */,
+				D3E9C1462C6C87AD007937D1 /* PresentViewControllerAnimation.swift in Sources */,
+				D3B225FC2D069BE6009130F6 /* ViewController+Operation.swift in Sources */,
 				D3F36BDB2C0827C500400BE9 /* AsynchronousOperation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
