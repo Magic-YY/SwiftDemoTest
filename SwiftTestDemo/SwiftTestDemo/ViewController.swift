@@ -26,6 +26,8 @@ class ViewController: UIViewController {
         view.backgroundColor = .gray
         print("test")
         
+        streamAction()
+        
 //        gcdTestAction()
 //        operationAction()
 //        configCycleView()
@@ -46,5 +48,39 @@ class ViewController: UIViewController {
 
 // MARK: - AsyncStream
 extension ViewController {
+    func streamAction() {
+        Task {
+            let t = Task {
+                let timer = timerStream
+                for await v in timer {
+                    print("await v \(v)")
+                }
+            }
+            try? await Task.sleep(nanoseconds: 2 * NSEC_PER_SEC)
+            t.cancel()
+        }
+        
+    }
     
+    var timerStream: AsyncStream<Date> {
+        AsyncStream<Date> { continuation in
+            let initial = Date()
+            Task {
+                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+                    let now = Date()
+                    print("Call yield")
+                    continuation.yield(Date())
+                    let diff = now.timeIntervalSince(initial)
+                    if diff > 10 {
+                        print("Call finish")
+                        continuation.finish()
+                        timer.invalidate()
+                    }
+                }
+                continuation.onTermination = { @Sendable state in
+                    print("onTermination: \(state)")
+                }
+            }
+        }
+    }
 }
