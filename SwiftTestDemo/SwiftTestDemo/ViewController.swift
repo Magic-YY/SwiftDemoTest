@@ -50,37 +50,72 @@ class ViewController: UIViewController {
 extension ViewController {
     func streamAction() {
         Task {
+            let timer = timerStream
             let t = Task {
-                let timer = timerStream
                 for await v in timer {
-                    print("await v \(v)")
+                    print("await v \(String(describing: v))")
                 }
             }
-            try? await Task.sleep(nanoseconds: 2 * NSEC_PER_SEC)
-            t.cancel()
+            try? await Task.sleep(nanoseconds: 5 * NSEC_PER_SEC)
+//            t.cancel()
+            cancle = true
         }
-        
     }
     
-    var timerStream: AsyncStream<Date> {
-        AsyncStream<Date> { continuation in
-            let initial = Date()
-            Task {
-                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-                    let now = Date()
-                    print("Call yield")
-                    continuation.yield(Date())
-                    let diff = now.timeIntervalSince(initial)
-                    if diff > 10 {
-                        print("Call finish")
-                        continuation.finish()
-                        timer.invalidate()
-                    }
-                }
-                continuation.onTermination = { @Sendable state in
-                    print("onTermination: \(state)")
-                }
-            }
+    var timerStream: AsyncStream<Date?> {
+//        // Timer驱动
+//        AsyncStream<Date> { continuation in
+//            let initial = Date()
+//            Task {
+//                let cusTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+//                    let now = Date()
+//                    print("Call yield")
+//                    continuation.yield(Date())
+//                    let diff = now.timeIntervalSince(initial)
+//                    if diff > 10 {
+//                        print("Call finish")
+//                        continuation.finish()
+//                        timer.invalidate()
+//                    }
+//                }
+//                continuation.onTermination = { @Sendable state in
+//                    // 同步取消定时器，否则会在diff > 10条件中取消
+////                    cusTimer.invalidate()
+//                    print("onTermination: \(state)")
+//                }
+//            }
+//        }
+        
+        // return驱动产生值
+        AsyncStream {
+//            if self.cancle {
+//                // 此时会取消继续迭代
+//                print("return nil")
+//                return nil
+//            }
+            try? await Task.sleep(nanoseconds: NSEC_PER_SEC)
+            return Date()
+
+        } onCancel: {
+            print("取消 cancle")
         }
+        // 打印
+        /*
+         await v Optional(2025-02-07 08:45:33 +0000)
+         await v Optional(2025-02-07 08:45:34 +0000)
+         await v Optional(2025-02-07 08:45:35 +0000)
+         await v Optional(2025-02-07 08:45:36 +0000)
+         取消 cancle
+         await v Optional(2025-02-07 08:45:37 +0000)
+         取消 cancle
+         
+         // return nil 打印,不会触发onCancel
+         await v Optional(2025-02-07 08:57:05 +0000)
+         await v Optional(2025-02-07 08:57:06 +0000)
+         await v Optional(2025-02-07 08:57:07 +0000)
+         await v Optional(2025-02-07 08:57:08 +0000)
+         await v Optional(2025-02-07 08:57:09 +0000)
+         return nil
+         */
     }
 }
