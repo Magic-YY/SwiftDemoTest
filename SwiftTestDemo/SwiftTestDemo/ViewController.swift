@@ -39,7 +39,9 @@ class ViewController: UIViewController {
     //        gcdTestAction()
     //        operationAction()
     //        configCycleView()
-      playVideo()
+//      playVideo()
+      
+      
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -69,7 +71,8 @@ extension ViewController {
         let mp4 = "https://www.w3schools.com/html/mov_bbb.mp4"
         if let cacheUrl = CEVideoCacheManager.shared.getCachedVideoPath(for: mp4) {
             print("videocache - 读取缓存")
-            url = URL(filePath: cacheUrl)
+//            url = URL(filePath: cacheUrl)
+            url = URL(fileURLWithPath: cacheUrl)
         } else {
             print("videocache - 读取远端")
             url = URL(string: mp4)
