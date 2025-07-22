@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3E59114D8B4EA777200EC84E /* Pods_SwiftTestDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EAE99184B01B8A152B4FB5 /* Pods_SwiftTestDemo.framework */; };
 		D36D57D42E2F1F030013592E /* CEADMediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36D57D32E2F1F030013592E /* CEADMediaView.swift */; };
+		D36D57D92E2F2D0D0013592E /* CEVideoCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36D57D72E2F2D0D0013592E /* CEVideoCacheManager.swift */; };
+		D36D57DA2E2F2D0D0013592E /* VideoCacheExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36D57D82E2F2D0D0013592E /* VideoCacheExample.swift */; };
 		D37A86332BDDF63F000181B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37A86322BDDF63F000181B8 /* AppDelegate.swift */; };
 		D37A86352BDDF63F000181B8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37A86342BDDF63F000181B8 /* SceneDelegate.swift */; };
 		D37A86372BDDF63F000181B8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37A86362BDDF63F000181B8 /* ViewController.swift */; };
@@ -36,6 +38,8 @@
 		A2EAE99184B01B8A152B4FB5 /* Pods_SwiftTestDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftTestDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC65AD45F98186E982930459 /* Pods-SwiftTestDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftTestDemo.release.xcconfig"; path = "Target Support Files/Pods-SwiftTestDemo/Pods-SwiftTestDemo.release.xcconfig"; sourceTree = "<group>"; };
 		D36D57D32E2F1F030013592E /* CEADMediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CEADMediaView.swift; sourceTree = "<group>"; };
+		D36D57D72E2F2D0D0013592E /* CEVideoCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CEVideoCacheManager.swift; sourceTree = "<group>"; };
+		D36D57D82E2F2D0D0013592E /* VideoCacheExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCacheExample.swift; sourceTree = "<group>"; };
 		D37A862F2BDDF63F000181B8 /* SwiftTestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftTestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37A86322BDDF63F000181B8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D37A86342BDDF63F000181B8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +115,8 @@
 		D37A86312BDDF63F000181B8 /* SwiftTestDemo */ = {
 			isa = PBXGroup;
 			children = (
+				D36D57D72E2F2D0D0013592E /* CEVideoCacheManager.swift */,
+				D36D57D82E2F2D0D0013592E /* VideoCacheExample.swift */,
 				D3E9C13E2C6C584F007937D1 /* Animation */,
 				D38BA1C32C1A852A00346277 /* 轮播 */,
 				D3F36BD92C08271400400BE9 /* Operation */,
@@ -172,7 +178,6 @@
 				D37A862B2BDDF63F000181B8 /* Sources */,
 				D37A862C2BDDF63F000181B8 /* Frameworks */,
 				D37A862D2BDDF63F000181B8 /* Resources */,
-				D5EDF4D3C8090027B50E98C7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -256,23 +261,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D5EDF4D3C8090027B50E98C7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwiftTestDemo/Pods-SwiftTestDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SwiftTestDemo/Pods-SwiftTestDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SwiftTestDemo/Pods-SwiftTestDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -286,6 +274,8 @@
 				D3E9C1422C6C5875007937D1 /* BViewController.swift in Sources */,
 				D38BA1CF2C1AD6CB00346277 /* CycleCollectionViewCell.swift in Sources */,
 				D38BA1C52C1A85C000346277 /* CECycleScrollView.swift in Sources */,
+				D36D57D92E2F2D0D0013592E /* CEVideoCacheManager.swift in Sources */,
+				D36D57DA2E2F2D0D0013592E /* VideoCacheExample.swift in Sources */,
 				D37A86332BDDF63F000181B8 /* AppDelegate.swift in Sources */,
 				D37A86352BDDF63F000181B8 /* SceneDelegate.swift in Sources */,
 				D3B225FE2D069C5D009130F6 /* ViewController+Cycle.swift in Sources */,

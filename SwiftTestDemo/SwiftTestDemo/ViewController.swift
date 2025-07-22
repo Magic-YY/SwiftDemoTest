@@ -19,15 +19,6 @@ enum CSAdLayoutType {
   case other
 }
 
-// MARK: - 广告信息模型
-struct AdInfo {
-  let layoutType: CSAdLayoutType
-}
-
-// MARK: - 屏幕尺寸常量
-private let SCREEN_WIDTH = UIScreen.main.bounds.width
-private let SCREEN_HEIGHT = UIScreen.main.bounds.height
-
 class ViewController: UIViewController {
 
   var taskGroup: TaskGroup<TestModel?>?  // 声明一个变量来存储任务组
@@ -37,9 +28,6 @@ class ViewController: UIViewController {
   var images: [String] = ["img1", "img2", "img3", "img4"]
 
   var task: Task<(), Never>?
-
-  // 广告信息属性
-  var adInfo: AdInfo?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -51,20 +39,7 @@ class ViewController: UIViewController {
     //        gcdTestAction()
     //        operationAction()
     //        configCycleView()
-
-    let videoView = CEADMediaView()
-    videoView.frame = view.bounds
-    view.addSubview(videoView)
-
-    if let url = URL(string: "https://www.w3schools.com/html/mov_bbb.mp4") {
-      videoView.contentURL = url
-    }
-    videoView.videoCycleOnce = false
-    videoView.fetchVideoSize { videoSize in
-      print("yyy - videoSize=\(videoSize)")
-    }
-    videoView.muted = true
-    videoView.play()
+      playVideo()
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -80,6 +55,40 @@ class ViewController: UIViewController {
     view.backgroundColor = .yellow
     return view
   }()
+}
+
+// MARK: - 视频播放
+extension ViewController {
+    func playVideo() {
+        let videoView = CEADMediaView()
+        videoView.frame = view.bounds
+        view.addSubview(videoView)
+
+        // 读取缓存
+        var url: URL?
+        let mp4 = "https://www.w3schools.com/html/mov_bbb.mp4"
+        if let cacheUrl = CEVideoCacheManager.shared.getCachedVideoPath(for: mp4) {
+            print("videocache - 读取缓存")
+            url = URL(filePath: cacheUrl)
+        } else {
+            print("videocache - 读取远端")
+            url = URL(string: mp4)
+            // 下载
+            CEVideoCacheManager.shared.cacheVideos([mp4]) { success, url, localPath in
+                print("videocache 缓存\(success), url=\(url), localPath=\(localPath)")
+            }
+        }
+        
+        if let url {
+          videoView.contentURL = url
+        }
+        videoView.videoCycleOnce = false
+        videoView.fetchVideoSize { videoSize in
+          print("videocache - videoSize=\(videoSize)")
+        }
+        videoView.muted = true
+        videoView.play()
+    }
 }
 
 // MARK: - AsyncStream
