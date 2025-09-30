@@ -36,26 +36,34 @@
         }
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
         }
         .info-card {
             background: #ecf0f1;
-            padding: 15px;
+            padding: 20px;
             border-radius: 6px;
             border-left: 4px solid #3498db;
         }
-        .info-card strong {
+        .version-label {
             color: #2c3e50;
+            font-weight: normal;
+            margin-right: 10px;
+        }
+        .version-size {
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.1em;
         }
         .summary-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #f8f9fa;
+            color: #2c3e50;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
             text-align: center;
+            border: 1px solid #dee2e6;
         }
         .summary-box h3 {
             margin: 0 0 15px 0;
@@ -63,23 +71,72 @@
         }
         .summary-stats {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
+            gap: 40px;
         }
         .stat-item {
             text-align: center;
-            margin: 10px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            min-width: 180px;
+            position: relative;
+        }
+        .stat-item.ipa-change {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+        }
+        .stat-item.real-change {
+            background: #ffebee;
+            border: 2px dashed #e74c3c;
+        }
+        .stat-item.ipa-change::before {
+            content: "📦";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #2196f3;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .stat-item.real-change::before {
+            content: "💾";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
         .stat-number {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
             display: block;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            font-weight: 500;
         }
         .increase {
-            color: #e74c3c;
+            color: #ff6b6b;
         }
         .decrease {
-            color: #27ae60;
+            color: #51cf66;
         }
         .resource-section {
             margin: 30px 0;
@@ -137,6 +194,17 @@
         }
         .change-decrease {
             background-color: #27ae60;
+        }
+        .ipa-badge {
+            background-color: #2196f3 !important;
+        }
+        .real-badge {
+            background-color: #e74c3c !important;
+        }
+        .resource-change-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
         .details-panel {
             display: none;
@@ -236,27 +304,29 @@
         
         <div class="info-grid">
             <div class="info-card">
-                <strong>old版本IPA体积:</strong> 61.88 MB
+                <span class="version-label">old版本IPA体积:</span> 
+                <span class="version-size">61.88 MB</span>
             </div>
             <div class="info-card">
-                <strong>new版本IPA体积:</strong> 69.66 MB
+                <span class="version-label">new版本IPA体积:</span> 
+                <span class="version-size">69.66 MB</span>
             </div>
         </div>
 
         <div class="summary-box">
             <h3>📈 总体变化</h3>
             <div class="summary-stats">
-                <div class="stat-item">
+                <div class="stat-item ipa-change">
                     <span class="stat-number increase">
                         +7.78 MB
                     </span>
-                    <span>IPA体积变化</span>
+                    <span class="stat-label">IPA体积变化</span>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item real-change">
                     <span class="stat-number increase">
                         +18.41 MB
                     </span>
-                    <span>真实体积变化</span>
+                    <span class="stat-label">真实体积变化</span>
                 </div>
             </div>
         </div>
@@ -273,7 +343,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - Flutter.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +4.74 MB，真实增加 +10.66 MB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +4.74 MB</span>
+                            <span class="resource-change change-increase real-badge">真实 +10.66 MB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -333,7 +406,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - App.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +2.60 MB，真实增加 +6.41 MB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +2.60 MB</span>
+                            <span class="resource-change change-increase real-badge">真实 +6.41 MB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -379,7 +455,10 @@
                             <span class="expand-icon">▶</span>
                             其他文件
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +186.21 KB，真实增加 +315.29 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +186.21 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +315.29 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -432,7 +511,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - sqflite.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +66.46 KB，真实增加 +273.61 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +66.46 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +273.61 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -478,7 +560,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - image_picker_ios.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +45.62 KB，真实增加 +204.31 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +45.62 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +204.31 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -524,7 +609,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - flutter_boost.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +43.15 KB，真实增加 +205.60 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +43.15 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +205.60 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -570,7 +658,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - path_provider.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +31.76 KB，真实增加 +140.34 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +31.76 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +140.34 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -616,7 +707,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - fluttertoast.framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +27.98 KB，真实增加 +124.26 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +27.98 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +124.26 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -662,7 +756,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - flutter_keyboard_visib....framework
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +11.08 KB，真实增加 +80.55 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +11.08 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +80.55 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -708,7 +805,10 @@
                             <span class="expand-icon">▶</span>
                             配置文件
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +0.74 KB，真实增加 +1.52 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +0.74 KB</span>
+                            <span class="resource-change change-increase real-badge">真实 +1.52 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -739,7 +839,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - sqlcipher.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.01 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.01 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -764,7 +867,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - WCDBSwift.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.01 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.01 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -789,7 +895,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - sqliterk.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.00 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.00 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -814,7 +923,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - PLPrinterSDK.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.00 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.00 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -839,7 +951,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - libpag.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.00 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.00 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -864,7 +979,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - FT800SDK.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.00 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.00 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -889,7 +1007,10 @@
                             <span class="expand-icon">▶</span>
                             Framework - WewinPrintLib.framework
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -0.00 KB，真实减少 -0.00 KB</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -0.00 KB</span>
+                            <span class="resource-change change-decrease real-badge">真实 -0.00 KB</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -911,7 +1032,7 @@
             </div>
         </div>
         <div class="timestamp">
-            报告生成时间: 2025-09-30 14:58:01
+            报告生成时间: 2025-09-30 15:13:12
         </div>
     </div>
 </body>

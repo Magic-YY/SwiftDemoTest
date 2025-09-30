@@ -602,26 +602,34 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
         }}
         .info-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
         }}
         .info-card {{
             background: #ecf0f1;
-            padding: 15px;
+            padding: 20px;
             border-radius: 6px;
             border-left: 4px solid #3498db;
         }}
-        .info-card strong {{
+        .version-label {{
             color: #2c3e50;
+            font-weight: normal;
+            margin-right: 10px;
+        }}
+        .version-size {{
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.1em;
         }}
         .summary-box {{
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #f8f9fa;
+            color: #2c3e50;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
             text-align: center;
+            border: 1px solid #dee2e6;
         }}
         .summary-box h3 {{
             margin: 0 0 15px 0;
@@ -629,23 +637,72 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
         }}
         .summary-stats {{
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
+            gap: 40px;
         }}
         .stat-item {{
             text-align: center;
-            margin: 10px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            min-width: 180px;
+            position: relative;
+        }}
+        .stat-item.ipa-change {{
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+        }}
+        .stat-item.real-change {{
+            background: #ffebee;
+            border: 2px dashed #e74c3c;
+        }}
+        .stat-item.ipa-change::before {{
+            content: "📦";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #2196f3;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }}
+        .stat-item.real-change::before {{
+            content: "💾";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }}
         .stat-number {{
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
             display: block;
+            margin-bottom: 5px;
+        }}
+        .stat-label {{
+            font-size: 0.9em;
+            opacity: 0.9;
+            font-weight: 500;
         }}
         .increase {{
-            color: #e74c3c;
+            color: #ff6b6b;
         }}
         .decrease {{
-            color: #27ae60;
+            color: #51cf66;
         }}
         .resource-section {{
             margin: 30px 0;
@@ -703,6 +760,17 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
         }}
         .change-decrease {{
             background-color: #27ae60;
+        }}
+        .ipa-badge {{
+            background-color: #2196f3 !important;
+        }}
+        .real-badge {{
+            background-color: #e74c3c !important;
+        }}
+        .resource-change-container {{
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }}
         .details-panel {{
             display: none;
@@ -802,27 +870,29 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
         
         <div class="info-grid">
             <div class="info-card">
-                <strong>{Path(old_ipa_path).parent.name}版本IPA体积:</strong> {format_size(old_file_size)}
+                <span class="version-label">{Path(old_ipa_path).parent.name}版本IPA体积:</span> 
+                <span class="version-size">{format_size(old_file_size)}</span>
             </div>
             <div class="info-card">
-                <strong>{Path(new_ipa_path).parent.name}版本IPA体积:</strong> {format_size(new_file_size)}
+                <span class="version-label">{Path(new_ipa_path).parent.name}版本IPA体积:</span> 
+                <span class="version-size">{format_size(new_file_size)}</span>
             </div>
         </div>
 
         <div class="summary-box">
             <h3>📈 总体变化</h3>
             <div class="summary-stats">
-                <div class="stat-item">
+                <div class="stat-item ipa-change">
                     <span class="stat-number {'increase' if file_size_diff > 0 else 'decrease'}">
                         {'+' if file_size_diff > 0 else ''}{format_size(file_size_diff)}
                     </span>
-                    <span>IPA体积变化</span>
+                    <span class="stat-label">IPA体积变化</span>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item real-change">
                     <span class="stat-number {'increase' if size_diff > 0 else 'decrease'}">
                         {'+' if size_diff > 0 else ''}{format_size(size_diff)}
                     </span>
-                    <span>真实体积变化</span>
+                    <span class="stat-label">真实体积变化</span>
                 </div>
             </div>
         </div>
@@ -855,7 +925,10 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
                             <span class="expand-icon">▶</span>
                             {file_type}
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +{format_size(type_diff)}，真实增加 +{format_size(real_diff)}</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-increase ipa-badge">IPA +{format_size(type_diff)}</span>
+                            <span class="resource-change change-increase real-badge">真实 +{format_size(real_diff)}</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -963,7 +1036,10 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
                             <span class="expand-icon">▶</span>
                             {file_type}
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -{format_size(abs(type_diff))}，真实减少 -{format_size(abs(real_diff))}</span>
+                        <div class="resource-change-container">
+                            <span class="resource-change change-decrease ipa-badge">IPA -{format_size(abs(type_diff))}</span>
+                            <span class="resource-change change-decrease real-badge">真实 -{format_size(abs(real_diff))}</span>
+                        </div>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
