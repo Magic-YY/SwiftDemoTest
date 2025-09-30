@@ -50,8 +50,13 @@ def shorten_framework_name(framework_name):
     
     return name + '.framework'
 
-def analyze_ipa_content(ipa_path):
-    """分析IPA文件内容"""
+def analyze_ipa_content(ipa_path, aggregate_mode=True):
+    """分析IPA文件内容
+    
+    Args:
+        ipa_path: IPA文件路径
+        aggregate_mode: 是否使用汇总模式。True时将子组件汇总到主framework
+    """
     file_info = {}
     total_uncompressed_size = 0
     total_compressed_size = 0
@@ -65,7 +70,7 @@ def analyze_ipa_content(ipa_path):
                     compressed_size = file_info_obj.compress_size
                     
                     # 分类文件类型
-                    file_type = categorize_file(file_path)
+                    file_type = categorize_file(file_path, aggregate_mode)
                     
                     file_info[file_path] = {
                         'size': file_size,
@@ -80,18 +85,54 @@ def analyze_ipa_content(ipa_path):
     
     return file_info, total_uncompressed_size, total_compressed_size
 
-def categorize_file(file_path):
-    """根据文件路径和扩展名分类文件"""
+def categorize_file(file_path, aggregate_mode=True):
+    """根据文件路径和扩展名分类文件
+    
+    Args:
+        file_path: 文件路径
+        aggregate_mode: 是否使用汇总模式。True时将子组件汇总到主framework，False时显示详细分类
+    """
     path_lower = file_path.lower()
     
-    # Framework文件 - 提取具体的framework名称
+    # Framework文件 - 提取具体的framework名称和子组件
     if '.framework/' in path_lower:
         # 提取framework名称，例如从 "Frameworks/App.framework/App" 提取 "App.framework"
         framework_match = file_path.split('.framework/')[0]
         framework_name = framework_match.split('/')[-1] + '.framework'
-        # 缩短过长的Framework名称
-        short_name = shorten_framework_name(framework_name)
-        return f'Framework - {short_name}'
+        short_framework_name = shorten_framework_name(framework_name)
+        
+        if aggregate_mode:
+            # 汇总模式：所有framework内的文件都归类到主framework
+            return f'Framework - {short_framework_name}'
+        else:
+            # 详细模式：显示子组件分类
+            remaining_path = file_path.split('.framework/', 1)[1]
+            
+            # 检查是否包含bundle
+            if '.bundle/' in remaining_path:
+                bundle_match = remaining_path.split('.bundle/')[0]
+                bundle_name = bundle_match.split('/')[-1] + '.bundle'
+                return f'Framework - {short_framework_name} → {bundle_name}'
+            
+            # 检查是否包含其他特殊目录结构
+            if 'flutter_assets/' in remaining_path:
+                # 进一步分析flutter_assets的子目录
+                assets_path = remaining_path.split('flutter_assets/', 1)[1]
+                if assets_path.startswith('packages/'):
+                    package_path = assets_path.split('packages/', 1)[1]
+                    package_name = package_path.split('/')[0]
+                    return f'Framework - {short_framework_name} → flutter_assets → {package_name}'
+                elif assets_path.startswith('shaders/'):
+                    return f'Framework - {short_framework_name} → flutter_assets → shaders'
+                elif assets_path.startswith('fonts/'):
+                    return f'Framework - {short_framework_name} → flutter_assets → fonts'
+                elif assets_path.startswith('assets/'):
+                    return f'Framework - {short_framework_name} → flutter_assets → assets'
+                else:
+                    return f'Framework - {short_framework_name} → flutter_assets'
+            
+            # 普通framework文件
+            return f'Framework - {short_framework_name}'
     elif file_path.endswith('.framework'):
         framework_name = Path(file_path).name
         short_name = shorten_framework_name(framework_name)
@@ -135,11 +176,17 @@ def categorize_file(file_path):
 def compare_ipa_files(old_ipa_path, new_ipa_path):
     """比较两个IPA文件"""
     print("正在分析旧版本IPA文件...")
-    old_files, old_total_size, old_compressed_total = analyze_ipa_content(old_ipa_path)
+    # 汇总模式分析：用于生成类型总览
+    old_files_agg, old_total_size, old_compressed_total = analyze_ipa_content(old_ipa_path, aggregate_mode=True)
+    # 详细模式分析：用于展示具体文件列表
+    old_files_detail, _, _ = analyze_ipa_content(old_ipa_path, aggregate_mode=False)
     old_file_size = get_file_size(old_ipa_path)  # IPA文件本身大小
     
     print("正在分析新版本IPA文件...")
-    new_files, new_total_size, new_compressed_total = analyze_ipa_content(new_ipa_path)
+    # 汇总模式分析：用于生成类型总览
+    new_files_agg, new_total_size, new_compressed_total = analyze_ipa_content(new_ipa_path, aggregate_mode=True)
+    # 详细模式分析：用于展示具体文件列表
+    new_files_detail, _, _ = analyze_ipa_content(new_ipa_path, aggregate_mode=False)
     new_file_size = get_file_size(new_ipa_path)  # IPA文件本身大小
     
     # 计算总体积变化（解压后内容）
@@ -147,23 +194,23 @@ def compare_ipa_files(old_ipa_path, new_ipa_path):
     # 计算IPA文件本身大小变化
     file_size_diff = new_file_size - old_file_size
     
-    # 按类型分组统计（使用压缩后大小，更准确反映IPA包的实际贡献）
+    # 按类型分组统计（使用压缩后大小，更准确反映IPA包的实际贡献）- 使用汇总数据
     old_by_type_compressed = defaultdict(int)
     new_by_type_compressed = defaultdict(int)
     old_by_type_uncompressed = defaultdict(int)
     new_by_type_uncompressed = defaultdict(int)
     
-    for file_path, info in old_files.items():
+    for file_path, info in old_files_agg.items():
         old_by_type_compressed[info['type']] += info['compressed_size']
         old_by_type_uncompressed[info['type']] += info['size']
     
-    for file_path, info in new_files.items():
+    for file_path, info in new_files_agg.items():
         new_by_type_compressed[info['type']] += info['compressed_size']
         new_by_type_uncompressed[info['type']] += info['size']
     
-    # 生成报告
+    # 生成报告 - 使用详细数据来展示文件列表
     report = generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, file_size_diff,
-                           old_total_size, new_total_size, size_diff, old_files, new_files, 
+                           old_total_size, new_total_size, size_diff, old_files_detail, new_files_detail, 
                            old_by_type_compressed, new_by_type_compressed, old_by_type_uncompressed, new_by_type_uncompressed)
     
     return report
@@ -219,7 +266,12 @@ def generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, fi
                                          old_total_size, new_total_size, size_diff, old_files, new_files, 
                                          old_by_type_compressed, new_by_type_compressed, old_by_type_uncompressed, new_by_type_uncompressed)
     
-    report_lines.append(f"**📊 Web版报告**: [点击在浏览器中查看详细报告](file://{html_file_path})")
+    # 使用urllib来正确编码URL
+    import urllib.parse
+    import urllib.request
+    html_file_url = urllib.parse.urljoin('file:', urllib.request.pathname2url(html_file_path))
+    report_lines.append(f"**📊 Web版报告**: [点击在浏览器中查看详细报告]({html_file_url})")
+    report_lines.append(f"**📄 HTML文件路径**: {html_file_path}")
     report_lines.append("")
     report_lines.append("---")  # 分割线
     report_lines.append("")
@@ -976,21 +1028,36 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
     
     return str(html_file_path.absolute())
 
+def find_ipa_file(directory):
+    """在指定目录中查找第一个IPA文件"""
+    directory = Path(directory)
+    ipa_files = list(directory.glob("*.ipa"))
+    if ipa_files:
+        return ipa_files[0]
+    return None
+
 def main():
     """主函数"""
     current_dir = Path(__file__).parent
-    old_ipa = current_dir / "old" / "QuizGo.ipa"
-    new_ipa = current_dir / "new" / "QuizGo.ipa"
+    old_dir = current_dir / "old"
+    new_dir = current_dir / "new"
     result_file = current_dir / "result.txt"
     
+    # 自动查找IPA文件
+    old_ipa = find_ipa_file(old_dir)
+    new_ipa = find_ipa_file(new_dir)
+    
     # 检查文件是否存在
-    if not old_ipa.exists():
-        print(f"错误: 找不到旧版本IPA文件: {old_ipa}")
+    if not old_ipa:
+        print(f"错误: 在old目录中找不到IPA文件: {old_dir}")
         return
     
-    if not new_ipa.exists():
-        print(f"错误: 找不到新版本IPA文件: {new_ipa}")
+    if not new_ipa:
+        print(f"错误: 在new目录中找不到IPA文件: {new_dir}")
         return
+    
+    print(f"找到旧版本IPA: {old_ipa.name}")
+    print(f"找到新版本IPA: {new_ipa.name}")
     
     print("开始比较IPA文件...")
     
@@ -1003,6 +1070,26 @@ def main():
             f.write(report)
         
         print(f"\n比较完成！结果已保存到: {result_file}")
+        
+        # 尝试自动打开HTML报告
+        html_file = current_dir / "ipa_comparison_report.html"
+        if html_file.exists():
+            try:
+                import subprocess
+                import sys
+                if sys.platform == "darwin":  # macOS
+                    subprocess.run(["open", str(html_file)], check=False)
+                    print(f"✅ 已在默认浏览器中打开HTML报告")
+                elif sys.platform == "win32":  # Windows
+                    subprocess.run(["start", str(html_file)], shell=True, check=False)
+                    print(f"✅ 已在默认浏览器中打开HTML报告")
+                elif sys.platform == "linux":  # Linux
+                    subprocess.run(["xdg-open", str(html_file)], check=False)
+                    print(f"✅ 已在默认浏览器中打开HTML报告")
+            except Exception as e:
+                print(f"⚠️  无法自动打开浏览器，请手动打开: {html_file}")
+                print(f"   错误信息: {e}")
+        
         print("\n" + "="*50)
         print("报告预览:")
         print("="*50)

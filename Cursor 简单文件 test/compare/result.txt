@@ -1,16 +1,17 @@
 # IPA文件大小对比报告
 
 ## 基本信息
-- **old版本IPA体积**: 73.35 MB
-- **new版本IPA体积**: 107.49 MB
+- **old版本IPA体积**: 61.88 MB
+- **new版本IPA体积**: 69.66 MB
 
 ## IPA包体积增减总信息
 
-**各类型变化总和**: 34.06 MB
-**IPA文件实际变化**: 34.14 MB
-**差异（ZIP头/元数据等）**: 84.07 KB
+**各类型变化总和**: 7.76 MB
+**IPA文件实际变化**: 7.78 MB
+**差异（ZIP头/元数据等）**: 22.92 KB
 
-**📊 Web版报告**: [点击在浏览器中查看详细报告](file:///Users/yun_yang/Documents/Cursor 简单文件 test/compare/ipa_comparison_report.html)
+**📊 Web版报告**: [点击在浏览器中查看详细报告](file:///Users/yun_yang/Desktop/SwiftDemoTest/Cursor%20%E7%AE%80%E5%8D%95%E6%96%87%E4%BB%B6%20test/compare/ipa_comparison_report.html)
+**📄 HTML文件路径**: /Users/yun_yang/Desktop/SwiftDemoTest/Cursor 简单文件 test/compare/ipa_comparison_report.html
 
 ---
 
@@ -18,199 +19,93 @@
 
 *按增大幅度由大到小排序：*
 
-- **其他文件**: 增大 18.81 MB (58.68 MB → 77.49 MB)
-- **Framework - App.framework**: 增大 8.65 MB (0.00 KB → 8.65 MB)
-- **Framework - Flutter.framework**: 增大 4.77 MB (0.00 KB → 4.77 MB)
-- **视频资源**: 增大 493.25 KB (4.99 MB → 5.48 MB)
-- **Framework - spine_flutter.framework**: 增大 250.45 KB (0.00 KB → 250.45 KB)
-- **Framework - libwebp.framework**: 增大 246.41 KB (0.00 KB → 246.41 KB)
-- **图片资源**: 增大 238.54 KB (3.64 MB → 3.88 MB)
-- **Framework - SDWebImage.framework**: 增大 231.77 KB (0.00 KB → 231.77 KB)
-- **配置文件**: 增大 209.21 KB (1.34 MB → 1.54 MB)
-- **Framework - flutter_img_compress.framework**: 增大 83.64 KB (0.00 KB → 83.64 KB)
-- **Framework - Mantle.framework**: 增大 49.15 KB (0.00 KB → 49.15 KB)
-- **Framework - SDWebImageWebP.framework**: 增大 27.03 KB (0.00 KB → 27.03 KB)
-- **Framework - sqlcipher.framework**: 增大 0.14 KB (492.49 KB → 492.62 KB)
-- **Interface文件**: 增大 0.10 KB (40.82 KB → 40.93 KB)
-- **Framework - WewinPrintLib.framework**: 增大 0.00 KB (253.09 KB → 253.09 KB)
-- **Framework - AdjustSigSdk.framework**: 增大 0.00 KB (224.40 KB → 224.40 KB)
-- **Framework - PLPrinterSDK.framework**: 增大 0.00 KB (158.50 KB → 158.50 KB)
+- **Framework - Flutter.framework**: 增大 4.74 MB (0.00 KB → 4.74 MB)
+- **Framework - App.framework**: 增大 2.60 MB (0.00 KB → 2.60 MB)
+- **其他文件**: 增大 186.21 KB (47.73 MB → 47.92 MB)
+- **Framework - sqflite.framework**: 增大 66.46 KB (0.00 KB → 66.46 KB)
+- **Framework - image_picker_ios.framework**: 增大 45.62 KB (0.00 KB → 45.62 KB)
+- **Framework - flutter_boost.framework**: 增大 43.15 KB (0.00 KB → 43.15 KB)
+- **Framework - path_provider.framework**: 增大 31.76 KB (0.00 KB → 31.76 KB)
+- **Framework - fluttertoast.framework**: 增大 27.98 KB (0.00 KB → 27.98 KB)
+- **Framework - flutter_keyboard_visib....framework**: 增大 11.08 KB (0.00 KB → 11.08 KB)
+- **配置文件**: 增大 0.74 KB (206.03 KB → 206.77 KB)
 
-### 📄 其他文件 - 详细文件列表 (IPA增大: 18.81 MB)
-
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| ...ls/2F81C8B7-819A-3DB9-A9F3-81118EA09546.symbols | - | 65.57 MB | +65.57 MB | 新增 |
-| ...ls/4C4C44FB-5555-3144-A1AC-2283BC901480.symbols | - | 63.40 MB | +63.40 MB | 新增 |
-| ...ls/75367250-FF72-3FD8-ACBD-43A13CB1C1EA.symbols | - | 4.71 MB | +4.71 MB | 新增 |
-| ...ls/AA322FC4-9FAF-36DF-81D8-51EED0DF67BB.symbols | - | 1.94 MB | +1.94 MB | 新增 |
-| ...ls/6D806EA3-7BB3-3A5E-B6E1-5B2596482F46.symbols | - | 1.46 MB | +1.46 MB | 新增 |
-| ...ls/EC7F017A-B413-397D-8201-170A35DB449D.symbols | - | 1.36 MB | +1.36 MB | 新增 |
-| ...ls/3B0F5A2D-AF2F-3602-963C-4D7B916E62D5.symbols | - | 287.18 KB | +287.18 KB | 新增 |
-| ...ls/17CB1F64-AAA9-36F5-BB2A-B71E8DBF3B85.symbols | - | 149.03 KB | +149.03 KB | 新增 |
-| ...ls/A1940734-F6F9-3BC2-83FF-3181A355530D.symbols | - | 127.00 KB | +127.00 KB | 新增 |
-| ...ls/5303FDA6-E7A0-30FD-A6EF-B4184B315521.symbols | - | 33.63 KB | +33.63 KB | 新增 |
-| .../QuizGo.app/Sentry.bundle/PrivacyInfo.xcprivacy | - | 2.11 KB | +2.11 KB | 新增 |
-| ...dler_apple_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.66 KB | +0.66 KB | 新增 |
-| ...foundation_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.60 KB | +0.60 KB | 新增 |
-| ...foundation_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.37 KB | +0.37 KB | 新增 |
-| ...uttertoast_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.37 KB | +0.37 KB | 新增 |
-| ..._info_plus_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.37 KB | +0.37 KB | 新增 |
-| ..._info_plus_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.37 KB | +0.37 KB | 新增 |
-| ...ite_darwin_privacy.bundle/PrivacyInfo.xcprivacy | - | 0.37 KB | +0.37 KB | 新增 |
-| Payload/QuizGo.app/QuizGo | 56.19 MB | 58.10 MB | +1.91 MB | 修改 |
-| Payload/QuizGo.app/Assets.car | 7.66 MB | 7.77 MB | +108.60 KB | 修改 |
-
-*注: 其他文件类型共有 84 个文件，仅显示变化较大的 20 个*
-
-### 📄 Framework - App.framework - 详细文件列表 (IPA增大: 8.65 MB)
-
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| App.framework/App | - | 11.04 MB | +11.04 MB | 新增 |
-| App.framework/...ages/avatar-active.png | - | 0.97 MB | +0.97 MB | 新增 |
-| App.framework/...ges/eastasianwoman.png | - | 0.79 MB | +0.79 MB | 新增 |
-| App.framework/.../libspine_flutter.wasm | - | 409.93 KB | +409.93 KB | 新增 |
-| App.framework/...ts/images/bg-block.png | - | 355.32 KB | +355.32 KB | 新增 |
-| App.framework/...sets/images/avatar.png | - | 318.57 KB | +318.57 KB | 新增 |
-| App.framework/...ite/spine-cpp-lite.cpp | - | 171.82 KB | +171.82 KB | 新增 |
-| App.framework/...es/eastasianwoman.skel | - | 162.17 KB | +162.17 KB | 新增 |
-| App.framework/...assets/images/mask.png | - | 159.97 KB | +159.97 KB | 新增 |
-| App.framework/...nts/HarmonyOS_Sans.ttf | - | 146.62 KB | +146.62 KB | 新增 |
-| App.framework/...monyOS_Sans_Medium.ttf | - | 146.16 KB | +146.16 KB | 新增 |
-| App.framework/...armonyOS_Sans_Bold.ttf | - | 145.86 KB | +145.86 KB | 新增 |
-| App.framework/flutter_assets/NOTICES.Z | - | 126.11 KB | +126.11 KB | 新增 |
-| App.framework/...r/assets/images/bg.jpg | - | 120.55 KB | +120.55 KB | 新增 |
-| App.framework/...d_web/howler/howler.js | - | 105.78 KB | +105.78 KB | 新增 |
-| App.framework/...sult_part_correct.json | - | 99.00 KB | +99.00 KB | 新增 |
-| App.framework/...esult_all_correct.json | - | 87.78 KB | +87.78 KB | 新增 |
-| App.framework/...-lite/spine-cpp-lite.h | - | 86.17 KB | +86.17 KB | 新增 |
-| App.framework/...e/slice_bgd_glory.webp | - | 79.77 KB | +79.77 KB | 新增 |
-| App.framework/...ound_part_correct.webp | - | 75.24 KB | +75.24 KB | 新增 |
-
-*注: Framework - App.framework类型共有 153 个文件，仅显示变化较大的 20 个*
-
-### 📄 Framework - Flutter.framework - 详细文件列表 (IPA增大: 4.77 MB)
+### 📄 Framework - Flutter.framework - 详细文件列表 (IPA增大: 4.74 MB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
 | Flutter.framework/Flutter | - | 9.87 MB | +9.87 MB | 新增 |
 | Flutter.framework/icudtl.dat | - | 0.78 MB | +0.78 MB | 新增 |
-| Flutter.framework/Headers/FlutterEngine.h | - | 20.72 KB | +20.72 KB | 新增 |
-| Flutter.framework/Headers/FlutterChannels.h | - | 18.41 KB | +18.41 KB | 新增 |
-| Flutter.framework/Headers/FlutterPlugin.h | - | 16.28 KB | +16.28 KB | 新增 |
-| Flutter.framework/Headers/FlutterCodecs.h | - | 15.29 KB | +15.29 KB | 新增 |
-| Flutter.framework/...lutterViewController.h | - | 10.18 KB | +10.18 KB | 新增 |
-| Flutter.framework/...ignature/CodeResources | - | 6.58 KB | +6.58 KB | 新增 |
-| Flutter.framework/...AppLifeCycleDelegate.h | - | 5.32 KB | +5.32 KB | 新增 |
-| Flutter.framework/...s/FlutterEngineGroup.h | - | 4.75 KB | +4.75 KB | 新增 |
-| Flutter.framework/...erHeadlessDartRunner.h | - | 3.93 KB | +3.93 KB | 新增 |
-| Flutter.framework/...s/FlutterDartProject.h | - | 3.91 KB | +3.91 KB | 新增 |
-| Flutter.framework/...utterBinaryMessenger.h | - | 3.76 KB | +3.76 KB | 新增 |
-| Flutter.framework/Headers/FlutterTexture.h | - | 2.26 KB | +2.26 KB | 新增 |
-| Flutter.framework/...FlutterPlatformViews.h | - | 1.97 KB | +1.97 KB | 新增 |
-| Flutter.framework/Headers/FlutterMacros.h | - | 1.82 KB | +1.82 KB | 新增 |
-| Flutter.framework/...FlutterCallbackCache.h | - | 1.72 KB | +1.72 KB | 新增 |
-| Flutter.framework/...s/FlutterAppDelegate.h | - | 1.27 KB | +1.27 KB | 新增 |
+| Flutter.framework/...ignature/CodeResources | - | 2.24 KB | +2.24 KB | 新增 |
 | Flutter.framework/Info.plist | - | 1.03 KB | +1.03 KB | 新增 |
-| Flutter.framework/Headers/Flutter.h | - | 0.85 KB | +0.85 KB | 新增 |
+| Flutter.framework/PrivacyInfo.xcprivacy | - | 0.84 KB | +0.84 KB | 新增 |
 
-*注: Framework - Flutter.framework类型共有 23 个文件，仅显示变化较大的 20 个*
-
-### 📄 视频资源 - 详细文件列表 (IPA增大: 493.25 KB)
+### 📄 Framework - App.framework - 详细文件列表 (IPA增大: 2.60 MB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| Payload/QuizGo.app/flashcardDemo.mp4 | - | 495.21 KB | +495.21 KB | 新增 |
+| App.framework/App | - | 6.02 MB | +6.02 MB | 新增 |
+| App.framework/...ignature/CodeResources | - | 6.78 KB | +6.78 KB | 新增 |
+| App.framework/Info.plist | - | 0.77 KB | +0.77 KB | 新增 |
 
-*注: 视频资源类型共有 14 个文件，仅显示变化较大的 1 个*
-
-### 📄 Framework - spine_flutter.framework - 详细文件列表 (IPA增大: 250.45 KB)
-
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| spine_flutter.framework/spine_flutter | - | 0.90 MB | +0.90 MB | 新增 |
-| spine_flutter.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
-| spine_flutter.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
-
-### 📄 Framework - libwebp.framework - 详细文件列表 (IPA增大: 246.41 KB)
+### 📄 其他文件 - 详细文件列表 (IPA增大: 186.21 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| libwebp.framework/libwebp | - | 0.64 MB | +0.64 MB | 新增 |
-| libwebp.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
-| libwebp.framework/Info.plist | - | 0.79 KB | +0.79 KB | 新增 |
+| ...ls/30B9C83E-513F-33D6-94D8-587DBA789A34.symbols | - | 56.16 MB | +56.16 MB | 新增 |
+| Payload/CamExam.app/CamExam | 50.73 MB | 50.83 MB | +101.76 KB | 修改 |
+| Payload/CamExam.app/_CodeSignature/CodeResources | 80.23 KB | 96.58 KB | +16.35 KB | 修改 |
+| ...ls/ECE58FCE-48E4-3DE2-A9C9-BE626D00C13E.symbols | 55.96 MB | - | -55.96 MB | 删除 |
 
-### 📄 图片资源 - 详细文件列表 (IPA增大: 238.54 KB)
+*注: 其他文件类型共有 73 个文件，仅显示变化较大的 4 个*
 
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| Payload/QuizGo.app/learning_coach_demo.jpg | - | 117.59 KB | +117.59 KB | 新增 |
-| Payload/QuizGo.app/image_coach_error.png | - | 69.54 KB | +69.54 KB | 新增 |
-| Payload/QuizGo.app/main_flascard_banner.png | - | 54.88 KB | +54.88 KB | 新增 |
-
-*注: 图片资源类型共有 73 个文件，仅显示变化较大的 3 个*
-
-### 📄 Framework - SDWebImage.framework - 详细文件列表 (IPA增大: 231.77 KB)
+### 📄 Framework - sqflite.framework - 详细文件列表 (IPA增大: 66.46 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| SDWebImage.framework/SDWebImage | - | 0.86 MB | +0.86 MB | 新增 |
-| SDWebImage.framework/...ignature/CodeResources | - | 2.46 KB | +2.46 KB | 新增 |
-| SDWebImage.framework/Info.plist | - | 0.79 KB | +0.79 KB | 新增 |
-| SDWebImage.framework/...mage.bundle/Info.plist | - | 0.77 KB | +0.77 KB | 新增 |
-| SDWebImage.framework/.../PrivacyInfo.xcprivacy | - | 0.60 KB | +0.60 KB | 新增 |
+| sqflite_darwin.framework/sqflite_darwin | - | 269.28 KB | +269.28 KB | 新增 |
+| sqflite_darwin.framework/...ignature/CodeResources | - | 2.36 KB | +2.36 KB | 新增 |
+| sqflite_darwin.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 配置文件 - 详细文件列表 (IPA增大: 209.21 KB)
+### 📄 Framework - image_picker_ios.framework - 详细文件列表 (IPA增大: 45.62 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| Payload/QuizGo.app/pay_vip_show.json | - | 120.85 KB | +120.85 KB | 新增 |
-| Payload/QuizGo.app/vip_shake_cycle.json | - | 120.84 KB | +120.84 KB | 新增 |
-| ...references_foundation_privacy.bundle/Info.plist | - | 0.82 KB | +0.82 KB | 新增 |
-| ...h_provider_foundation_privacy.bundle/Info.plist | - | 0.81 KB | +0.81 KB | 新增 |
-| ...mission_handler_apple_privacy.bundle/Info.plist | - | 0.81 KB | +0.81 KB | 新增 |
-| ...app/package_info_plus_privacy.bundle/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
-| ....app/device_info_plus_privacy.bundle/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
-| ...Go.app/sqflite_darwin_privacy.bundle/Info.plist | - | 0.79 KB | +0.79 KB | 新增 |
-| ...izGo.app/fluttertoast_privacy.bundle/Info.plist | - | 0.79 KB | +0.79 KB | 新增 |
-| Payload/QuizGo.app/Sentry.bundle/Info.plist | - | 0.76 KB | +0.76 KB | 新增 |
-| Payload/QuizGo.app/fr.lproj/Localizable.strings | 300.26 KB | 310.05 KB | +9.79 KB | 修改 |
-| Payload/QuizGo.app/vi.lproj/Localizable.strings | 292.55 KB | 302.13 KB | +9.57 KB | 修改 |
-| Payload/QuizGo.app/pt.lproj/Localizable.strings | 284.94 KB | 294.50 KB | +9.56 KB | 修改 |
-| Payload/QuizGo.app/es.lproj/Localizable.strings | 283.85 KB | 293.11 KB | +9.26 KB | 修改 |
-| Payload/QuizGo.app/de.lproj/Localizable.strings | 278.38 KB | 286.86 KB | +8.48 KB | 修改 |
-| Payload/QuizGo.app/id.lproj/Localizable.strings | 210.41 KB | 217.93 KB | +7.52 KB | 修改 |
-| Payload/QuizGo.app/en.lproj/Localizable.strings | 198.25 KB | 205.70 KB | +7.45 KB | 修改 |
-| Payload/QuizGo.app/ja.lproj/Localizable.strings | 196.70 KB | 203.97 KB | +7.27 KB | 修改 |
-| Payload/QuizGo.app/ko.lproj/Localizable.strings | 198.78 KB | 206.01 KB | +7.23 KB | 修改 |
-| ...ad/QuizGo.app/zh-Hant.lproj/Localizable.strings | 165.03 KB | 171.34 KB | +6.31 KB | 修改 |
+| image_picker_ios.framework/image_picker_ios | - | 199.97 KB | +199.97 KB | 新增 |
+| image_picker_ios.framework/...ignature/CodeResources | - | 2.37 KB | +2.37 KB | 新增 |
+| image_picker_ios.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-*注: 配置文件类型共有 158 个文件，仅显示变化较大的 20 个*
-
-### 📄 Framework - flutter_img_compress.framework - 详细文件列表 (IPA增大: 83.64 KB)
+### 📄 Framework - flutter_boost.framework - 详细文件列表 (IPA增大: 43.15 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| flutter_image_compress_common.framework/..._image_compress_common | - | 378.38 KB | +378.38 KB | 新增 |
-| flutter_image_compress_common.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
-| flutter_image_compress_common.framework/Info.plist | - | 0.83 KB | +0.83 KB | 新增 |
+| flutter_boost.framework/flutter_boost | - | 203.01 KB | +203.01 KB | 新增 |
+| flutter_boost.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
+| flutter_boost.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 Framework - Mantle.framework - 详细文件列表 (IPA增大: 49.15 KB)
-
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| Mantle.framework/Mantle | - | 176.56 KB | +176.56 KB | 新增 |
-| Mantle.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
-| Mantle.framework/Info.plist | - | 0.78 KB | +0.78 KB | 新增 |
-
-### 📄 Framework - SDWebImageWebP.framework - 详细文件列表 (IPA增大: 27.03 KB)
+### 📄 Framework - path_provider.framework - 详细文件列表 (IPA增大: 31.76 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
-| SDWebImageWebPCoder.framework/SDWebImageWebPCoder | - | 113.66 KB | +113.66 KB | 新增 |
-| SDWebImageWebPCoder.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
-| SDWebImageWebPCoder.framework/Info.plist | - | 0.81 KB | +0.81 KB | 新增 |
+| path_provider_foundation.framework/path_provider_foundation | - | 135.94 KB | +135.94 KB | 新增 |
+| path_provider_foundation.framework/...ignature/CodeResources | - | 2.40 KB | +2.40 KB | 新增 |
+| path_provider_foundation.framework/Info.plist | - | 0.82 KB | +0.82 KB | 新增 |
+
+### 📄 Framework - fluttertoast.framework - 详细文件列表 (IPA增大: 27.98 KB)
+
+| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
+|---------|------------|------------|------|------|
+| fluttertoast.framework/fluttertoast | - | 119.95 KB | +119.95 KB | 新增 |
+| fluttertoast.framework/...ignature/CodeResources | - | 2.35 KB | +2.35 KB | 新增 |
+| fluttertoast.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
+
+### 📄 Framework - flutter_keyboard_visib....framework - 详细文件列表 (IPA增大: 11.08 KB)
+
+| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
+|---------|------------|------------|------|------|
+| flutter_keyboard_visibility.framework/...er_keyboard_visibility | - | 77.92 KB | +77.92 KB | 新增 |
+| flutter_keyboard_visibility.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
+| flutter_keyboard_visibility.framework/Info.plist | - | 0.83 KB | +0.83 KB | 新增 |
 
 ---
 
@@ -218,15 +113,10 @@
 
 *按减少幅度由大到小排序：*
 
-- **Framework - WCDBSwift.framework**: 减少 5.43 KB (400.45 KB → 395.02 KB)
-- **Framework - sqliterk.framework**: 减少 0.14 KB (32.64 KB → 32.50 KB)
-- **Framework - FBAEMKit.framework**: 减少 0.01 KB (185.48 KB → 185.48 KB)
+- **Framework - sqlcipher.framework**: 减少 0.01 KB (492.61 KB → 492.61 KB)
+- **Framework - WCDBSwift.framework**: 减少 0.01 KB (400.55 KB → 400.55 KB)
+- **Framework - PLPrinterSDK.framework**: 减少 0.00 KB (158.60 KB → 158.59 KB)
+- **Framework - sqliterk.framework**: 减少 0.00 KB (32.75 KB → 32.75 KB)
+- **Framework - libpag.framework**: 减少 0.00 KB (0.85 MB → 0.85 MB)
 - **Framework - FT800SDK.framework**: 减少 0.00 KB (1.26 MB → 1.26 MB)
-
-### 📄 Framework - WCDBSwift.framework - 详细文件列表 (IPA减少: 5.43 KB)
-
-| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
-|---------|------------|------------|------|------|
-| WCDBSwift.framework/WCDBSwift | 1.61 MB | 1.58 MB | -34.13 KB | 修改 |
-
-*注: Framework - WCDBSwift.framework类型共有 3 个文件，仅显示变化较大的 1 个*
+- **Framework - WewinPrintLib.framework**: 减少 0.00 KB (253.19 KB → 253.19 KB)
