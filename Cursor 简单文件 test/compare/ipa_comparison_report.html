@@ -1,0 +1,1544 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPA文件大小对比报告</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .info-card {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        .info-card strong {
+            color: #2c3e50;
+        }
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .summary-box h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }
+        .summary-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+            margin: 10px;
+        }
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            display: block;
+        }
+        .increase {
+            color: #e74c3c;
+        }
+        .decrease {
+            color: #27ae60;
+        }
+        .resource-section {
+            margin: 30px 0;
+        }
+        .resource-list {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .resource-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .resource-header:hover {
+            background-color: #f8f9fa;
+        }
+        .resource-header.active {
+            background-color: #e9ecef;
+        }
+        .resource-name {
+            font-weight: 500;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .expand-icon {
+            margin-right: 10px;
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+        .resource-change {
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: white;
+        }
+        .change-increase {
+            background-color: #e74c3c;
+        }
+        .change-decrease {
+            background-color: #27ae60;
+        }
+        .details-panel {
+            display: none;
+            padding: 0 20px 20px 20px;
+            background-color: #f8f9fa;
+        }
+        .details-panel.show {
+            display: block;
+        }
+        .file-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .file-table th {
+            background-color: #34495e;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 500;
+        }
+        .file-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #dee2e6;
+            background-color: white;
+        }
+        .file-table tr:hover td {
+            background-color: #f1f3f4;
+        }
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+        .status-new {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-modified {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-deleted {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .file-change {
+            font-weight: 500;
+        }
+        .file-change.positive {
+            color: #e74c3c;
+        }
+        .file-change.negative {
+            color: #27ae60;
+        }
+        .timestamp {
+            text-align: center;
+            color: #7f8c8d;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+        .divider {
+            border: none;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #3498db, transparent);
+            margin: 30px 0;
+        }
+        .file-path {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-size: 0.85em;
+            color: #495057;
+        }
+    </style>
+    <script>
+        function toggleDetails(element) {
+            const panel = element.nextElementSibling;
+            const icon = element.querySelector('.expand-icon');
+            const header = element;
+            
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                icon.classList.remove('expanded');
+                header.classList.remove('active');
+            } else {
+                panel.classList.add('show');
+                icon.classList.add('expanded');
+                header.classList.add('active');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 IPA文件大小对比报告</h1>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <strong>old版本IPA体积:</strong> 73.35 MB
+            </div>
+            <div class="info-card">
+                <strong>new版本IPA体积:</strong> 107.49 MB
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <h3>📈 总体变化</h3>
+            <div class="summary-stats">
+                <div class="stat-item">
+                    <span class="stat-number increase">
+                        +34.14 MB
+                    </span>
+                    <span>IPA文件变化</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">
+                        34.06 MB
+                    </span>
+                    <span>各类型变化总和</span>
+                </div>
+                <div class="stat-item"><span class="stat-number">84.07 KB</span><span>ZIP头/元数据差异</span></div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="resource-section">
+            <h2>📈 新增/增大的资源类型</h2>
+            <p style="color: #6c757d; margin-bottom: 20px; font-style: italic;">以下显示各资源类型在IPA包中增加的体积大小（基于压缩后大小）</p>
+            <div class="resource-list">
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            其他文件
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +18.81 MB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">...ls/2F81C8B7-819A-3DB9-A9F3-81118EA09546.symbols</td>
+                                    <td>-</td>
+                                    <td>65.57 MB</td>
+                                    <td class="file-change positive">+65.57 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/4C4C44FB-5555-3144-A1AC-2283BC901480.symbols</td>
+                                    <td>-</td>
+                                    <td>63.40 MB</td>
+                                    <td class="file-change positive">+63.40 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/75367250-FF72-3FD8-ACBD-43A13CB1C1EA.symbols</td>
+                                    <td>-</td>
+                                    <td>4.71 MB</td>
+                                    <td class="file-change positive">+4.71 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/AA322FC4-9FAF-36DF-81D8-51EED0DF67BB.symbols</td>
+                                    <td>-</td>
+                                    <td>1.94 MB</td>
+                                    <td class="file-change positive">+1.94 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/6D806EA3-7BB3-3A5E-B6E1-5B2596482F46.symbols</td>
+                                    <td>-</td>
+                                    <td>1.46 MB</td>
+                                    <td class="file-change positive">+1.46 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/EC7F017A-B413-397D-8201-170A35DB449D.symbols</td>
+                                    <td>-</td>
+                                    <td>1.36 MB</td>
+                                    <td class="file-change positive">+1.36 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/3B0F5A2D-AF2F-3602-963C-4D7B916E62D5.symbols</td>
+                                    <td>-</td>
+                                    <td>287.18 KB</td>
+                                    <td class="file-change positive">+287.18 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/17CB1F64-AAA9-36F5-BB2A-B71E8DBF3B85.symbols</td>
+                                    <td>-</td>
+                                    <td>149.03 KB</td>
+                                    <td class="file-change positive">+149.03 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/A1940734-F6F9-3BC2-83FF-3181A355530D.symbols</td>
+                                    <td>-</td>
+                                    <td>127.00 KB</td>
+                                    <td class="file-change positive">+127.00 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ls/5303FDA6-E7A0-30FD-A6EF-B4184B315521.symbols</td>
+                                    <td>-</td>
+                                    <td>33.63 KB</td>
+                                    <td class="file-change positive">+33.63 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">.../QuizGo.app/Sentry.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>2.11 KB</td>
+                                    <td class="file-change positive">+2.11 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...dler_apple_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.66 KB</td>
+                                    <td class="file-change positive">+0.66 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...foundation_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.60 KB</td>
+                                    <td class="file-change positive">+0.60 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...foundation_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.37 KB</td>
+                                    <td class="file-change positive">+0.37 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...uttertoast_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.37 KB</td>
+                                    <td class="file-change positive">+0.37 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">..._info_plus_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.37 KB</td>
+                                    <td class="file-change positive">+0.37 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">..._info_plus_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.37 KB</td>
+                                    <td class="file-change positive">+0.37 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ite_darwin_privacy.bundle/PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.37 KB</td>
+                                    <td class="file-change positive">+0.37 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/QuizGo</td>
+                                    <td>56.19 MB</td>
+                                    <td>58.10 MB</td>
+                                    <td class="file-change positive">+1.91 MB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/Assets.car</td>
+                                    <td>7.66 MB</td>
+                                    <td>7.77 MB</td>
+                                    <td class="file-change positive">+108.60 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: 其他文件类型共有 84 个文件，仅显示变化较大的 20 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - App.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +8.65 MB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">App.framework/App</td>
+                                    <td>-</td>
+                                    <td>11.04 MB</td>
+                                    <td class="file-change positive">+11.04 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...ages/avatar-active.png</td>
+                                    <td>-</td>
+                                    <td>0.97 MB</td>
+                                    <td class="file-change positive">+0.97 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...ges/eastasianwoman.png</td>
+                                    <td>-</td>
+                                    <td>0.79 MB</td>
+                                    <td class="file-change positive">+0.79 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/.../libspine_flutter.wasm</td>
+                                    <td>-</td>
+                                    <td>409.93 KB</td>
+                                    <td class="file-change positive">+409.93 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...ts/images/bg-block.png</td>
+                                    <td>-</td>
+                                    <td>355.32 KB</td>
+                                    <td class="file-change positive">+355.32 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...sets/images/avatar.png</td>
+                                    <td>-</td>
+                                    <td>318.57 KB</td>
+                                    <td class="file-change positive">+318.57 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...ite/spine-cpp-lite.cpp</td>
+                                    <td>-</td>
+                                    <td>171.82 KB</td>
+                                    <td class="file-change positive">+171.82 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...es/eastasianwoman.skel</td>
+                                    <td>-</td>
+                                    <td>162.17 KB</td>
+                                    <td class="file-change positive">+162.17 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...assets/images/mask.png</td>
+                                    <td>-</td>
+                                    <td>159.97 KB</td>
+                                    <td class="file-change positive">+159.97 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...nts/HarmonyOS_Sans.ttf</td>
+                                    <td>-</td>
+                                    <td>146.62 KB</td>
+                                    <td class="file-change positive">+146.62 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...monyOS_Sans_Medium.ttf</td>
+                                    <td>-</td>
+                                    <td>146.16 KB</td>
+                                    <td class="file-change positive">+146.16 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...armonyOS_Sans_Bold.ttf</td>
+                                    <td>-</td>
+                                    <td>145.86 KB</td>
+                                    <td class="file-change positive">+145.86 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/flutter_assets/NOTICES.Z</td>
+                                    <td>-</td>
+                                    <td>126.11 KB</td>
+                                    <td class="file-change positive">+126.11 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...r/assets/images/bg.jpg</td>
+                                    <td>-</td>
+                                    <td>120.55 KB</td>
+                                    <td class="file-change positive">+120.55 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...d_web/howler/howler.js</td>
+                                    <td>-</td>
+                                    <td>105.78 KB</td>
+                                    <td class="file-change positive">+105.78 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...sult_part_correct.json</td>
+                                    <td>-</td>
+                                    <td>99.00 KB</td>
+                                    <td class="file-change positive">+99.00 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...esult_all_correct.json</td>
+                                    <td>-</td>
+                                    <td>87.78 KB</td>
+                                    <td class="file-change positive">+87.78 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...-lite/spine-cpp-lite.h</td>
+                                    <td>-</td>
+                                    <td>86.17 KB</td>
+                                    <td class="file-change positive">+86.17 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...e/slice_bgd_glory.webp</td>
+                                    <td>-</td>
+                                    <td>79.77 KB</td>
+                                    <td class="file-change positive">+79.77 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">App.framework/...ound_part_correct.webp</td>
+                                    <td>-</td>
+                                    <td>75.24 KB</td>
+                                    <td class="file-change positive">+75.24 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - App.framework类型共有 153 个文件，仅显示变化较大的 20 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - Flutter.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +4.77 MB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Flutter</td>
+                                    <td>-</td>
+                                    <td>9.87 MB</td>
+                                    <td class="file-change positive">+9.87 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/icudtl.dat</td>
+                                    <td>-</td>
+                                    <td>0.78 MB</td>
+                                    <td class="file-change positive">+0.78 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterEngine.h</td>
+                                    <td>-</td>
+                                    <td>20.72 KB</td>
+                                    <td class="file-change positive">+20.72 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterChannels.h</td>
+                                    <td>-</td>
+                                    <td>18.41 KB</td>
+                                    <td class="file-change positive">+18.41 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterPlugin.h</td>
+                                    <td>-</td>
+                                    <td>16.28 KB</td>
+                                    <td class="file-change positive">+16.28 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterCodecs.h</td>
+                                    <td>-</td>
+                                    <td>15.29 KB</td>
+                                    <td class="file-change positive">+15.29 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...lutterViewController.h</td>
+                                    <td>-</td>
+                                    <td>10.18 KB</td>
+                                    <td class="file-change positive">+10.18 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>6.58 KB</td>
+                                    <td class="file-change positive">+6.58 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...AppLifeCycleDelegate.h</td>
+                                    <td>-</td>
+                                    <td>5.32 KB</td>
+                                    <td class="file-change positive">+5.32 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...s/FlutterEngineGroup.h</td>
+                                    <td>-</td>
+                                    <td>4.75 KB</td>
+                                    <td class="file-change positive">+4.75 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...erHeadlessDartRunner.h</td>
+                                    <td>-</td>
+                                    <td>3.93 KB</td>
+                                    <td class="file-change positive">+3.93 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...s/FlutterDartProject.h</td>
+                                    <td>-</td>
+                                    <td>3.91 KB</td>
+                                    <td class="file-change positive">+3.91 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...utterBinaryMessenger.h</td>
+                                    <td>-</td>
+                                    <td>3.76 KB</td>
+                                    <td class="file-change positive">+3.76 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterTexture.h</td>
+                                    <td>-</td>
+                                    <td>2.26 KB</td>
+                                    <td class="file-change positive">+2.26 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...FlutterPlatformViews.h</td>
+                                    <td>-</td>
+                                    <td>1.97 KB</td>
+                                    <td class="file-change positive">+1.97 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/FlutterMacros.h</td>
+                                    <td>-</td>
+                                    <td>1.82 KB</td>
+                                    <td class="file-change positive">+1.82 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...FlutterCallbackCache.h</td>
+                                    <td>-</td>
+                                    <td>1.72 KB</td>
+                                    <td class="file-change positive">+1.72 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/...s/FlutterAppDelegate.h</td>
+                                    <td>-</td>
+                                    <td>1.27 KB</td>
+                                    <td class="file-change positive">+1.27 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>1.03 KB</td>
+                                    <td class="file-change positive">+1.03 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Flutter.framework/Headers/Flutter.h</td>
+                                    <td>-</td>
+                                    <td>0.85 KB</td>
+                                    <td class="file-change positive">+0.85 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - Flutter.framework类型共有 23 个文件，仅显示变化较大的 20 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            视频资源
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +493.25 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/flashcardDemo.mp4</td>
+                                    <td>-</td>
+                                    <td>495.21 KB</td>
+                                    <td class="file-change positive">+495.21 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: 视频资源类型共有 14 个文件，仅显示变化较大的 1 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - spine_flutter.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +250.45 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">spine_flutter.framework/spine_flutter</td>
+                                    <td>-</td>
+                                    <td>0.90 MB</td>
+                                    <td class="file-change positive">+0.90 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">spine_flutter.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>1.80 KB</td>
+                                    <td class="file-change positive">+1.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">spine_flutter.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.80 KB</td>
+                                    <td class="file-change positive">+0.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - libwebp.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +246.41 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">libwebp.framework/libwebp</td>
+                                    <td>-</td>
+                                    <td>0.64 MB</td>
+                                    <td class="file-change positive">+0.64 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">libwebp.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>1.80 KB</td>
+                                    <td class="file-change positive">+1.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">libwebp.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.79 KB</td>
+                                    <td class="file-change positive">+0.79 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            图片资源
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +238.54 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/learning_coach_demo.jpg</td>
+                                    <td>-</td>
+                                    <td>117.59 KB</td>
+                                    <td class="file-change positive">+117.59 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/image_coach_error.png</td>
+                                    <td>-</td>
+                                    <td>69.54 KB</td>
+                                    <td class="file-change positive">+69.54 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/main_flascard_banner.png</td>
+                                    <td>-</td>
+                                    <td>54.88 KB</td>
+                                    <td class="file-change positive">+54.88 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: 图片资源类型共有 73 个文件，仅显示变化较大的 3 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - SDWebImage.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +231.77 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">SDWebImage.framework/SDWebImage</td>
+                                    <td>-</td>
+                                    <td>0.86 MB</td>
+                                    <td class="file-change positive">+0.86 MB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImage.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>2.46 KB</td>
+                                    <td class="file-change positive">+2.46 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImage.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.79 KB</td>
+                                    <td class="file-change positive">+0.79 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImage.framework/...mage.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.77 KB</td>
+                                    <td class="file-change positive">+0.77 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImage.framework/.../PrivacyInfo.xcprivacy</td>
+                                    <td>-</td>
+                                    <td>0.60 KB</td>
+                                    <td class="file-change positive">+0.60 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            配置文件
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +209.21 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/pay_vip_show.json</td>
+                                    <td>-</td>
+                                    <td>120.85 KB</td>
+                                    <td class="file-change positive">+120.85 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/vip_shake_cycle.json</td>
+                                    <td>-</td>
+                                    <td>120.84 KB</td>
+                                    <td class="file-change positive">+120.84 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...references_foundation_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.82 KB</td>
+                                    <td class="file-change positive">+0.82 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...h_provider_foundation_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.81 KB</td>
+                                    <td class="file-change positive">+0.81 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...mission_handler_apple_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.81 KB</td>
+                                    <td class="file-change positive">+0.81 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...app/package_info_plus_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.80 KB</td>
+                                    <td class="file-change positive">+0.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">....app/device_info_plus_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.80 KB</td>
+                                    <td class="file-change positive">+0.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...Go.app/sqflite_darwin_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.79 KB</td>
+                                    <td class="file-change positive">+0.79 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...izGo.app/fluttertoast_privacy.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.79 KB</td>
+                                    <td class="file-change positive">+0.79 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/Sentry.bundle/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.76 KB</td>
+                                    <td class="file-change positive">+0.76 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/fr.lproj/Localizable.strings</td>
+                                    <td>300.26 KB</td>
+                                    <td>310.05 KB</td>
+                                    <td class="file-change positive">+9.79 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/vi.lproj/Localizable.strings</td>
+                                    <td>292.55 KB</td>
+                                    <td>302.13 KB</td>
+                                    <td class="file-change positive">+9.57 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/pt.lproj/Localizable.strings</td>
+                                    <td>284.94 KB</td>
+                                    <td>294.50 KB</td>
+                                    <td class="file-change positive">+9.56 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/es.lproj/Localizable.strings</td>
+                                    <td>283.85 KB</td>
+                                    <td>293.11 KB</td>
+                                    <td class="file-change positive">+9.26 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/de.lproj/Localizable.strings</td>
+                                    <td>278.38 KB</td>
+                                    <td>286.86 KB</td>
+                                    <td class="file-change positive">+8.48 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/id.lproj/Localizable.strings</td>
+                                    <td>210.41 KB</td>
+                                    <td>217.93 KB</td>
+                                    <td class="file-change positive">+7.52 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/en.lproj/Localizable.strings</td>
+                                    <td>198.25 KB</td>
+                                    <td>205.70 KB</td>
+                                    <td class="file-change positive">+7.45 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/ja.lproj/Localizable.strings</td>
+                                    <td>196.70 KB</td>
+                                    <td>203.97 KB</td>
+                                    <td class="file-change positive">+7.27 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Payload/QuizGo.app/ko.lproj/Localizable.strings</td>
+                                    <td>198.78 KB</td>
+                                    <td>206.01 KB</td>
+                                    <td class="file-change positive">+7.23 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">...ad/QuizGo.app/zh-Hant.lproj/Localizable.strings</td>
+                                    <td>165.03 KB</td>
+                                    <td>171.34 KB</td>
+                                    <td class="file-change positive">+6.31 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: 配置文件类型共有 158 个文件，仅显示变化较大的 20 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - flutter_img_compress.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +83.64 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">flutter_image_compress_common.framework/..._image_compress_common</td>
+                                    <td>-</td>
+                                    <td>378.38 KB</td>
+                                    <td class="file-change positive">+378.38 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">flutter_image_compress_common.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>1.80 KB</td>
+                                    <td class="file-change positive">+1.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">flutter_image_compress_common.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.83 KB</td>
+                                    <td class="file-change positive">+0.83 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - Mantle.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +49.15 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">Mantle.framework/Mantle</td>
+                                    <td>-</td>
+                                    <td>176.56 KB</td>
+                                    <td class="file-change positive">+176.56 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Mantle.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>1.80 KB</td>
+                                    <td class="file-change positive">+1.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">Mantle.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.78 KB</td>
+                                    <td class="file-change positive">+0.78 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - SDWebImageWebP.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +27.03 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">SDWebImageWebPCoder.framework/SDWebImageWebPCoder</td>
+                                    <td>-</td>
+                                    <td>113.66 KB</td>
+                                    <td class="file-change positive">+113.66 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImageWebPCoder.framework/...ignature/CodeResources</td>
+                                    <td>-</td>
+                                    <td>1.80 KB</td>
+                                    <td class="file-change positive">+1.80 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="file-path">SDWebImageWebPCoder.framework/Info.plist</td>
+                                    <td>-</td>
+                                    <td>0.81 KB</td>
+                                    <td class="file-change positive">+0.81 KB</td>
+                                    <td><span class="status-badge status-new">新增</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - sqlcipher.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +0.14 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - sqlcipher.framework类型共有 3 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Interface文件
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +0.10 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Interface文件类型共有 32 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - WewinPrintLib.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +0.00 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - WewinPrintLib.framework类型共有 27 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - AdjustSigSdk.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +0.00 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - AdjustSigSdk.framework类型共有 4 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - PLPrinterSDK.framework
+                        </span>
+                        <span class="resource-change change-increase">IPA增加 +0.00 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - PLPrinterSDK.framework类型共有 3 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="resource-section">
+            <h2>📉 减少的资源类型</h2>
+            <p style="color: #6c757d; margin-bottom: 20px; font-style: italic;">以下显示各资源类型在IPA包中减少的体积大小（基于压缩后大小）</p>
+            <div class="resource-list">
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - WCDBSwift.framework
+                        </span>
+                        <span class="resource-change change-decrease">IPA减少 -5.43 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="file-path">WCDBSwift.framework/WCDBSwift</td>
+                                    <td>1.61 MB</td>
+                                    <td>1.58 MB</td>
+                                    <td class="file-change negative">-34.13 KB</td>
+                                    <td><span class="status-badge status-modified">修改</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - WCDBSwift.framework类型共有 3 个文件，仅显示变化较大的 1 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - sqliterk.framework
+                        </span>
+                        <span class="resource-change change-decrease">IPA减少 -0.14 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - sqliterk.framework类型共有 3 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - FBAEMKit.framework
+                        </span>
+                        <span class="resource-change change-decrease">IPA减少 -0.01 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - FBAEMKit.framework类型共有 4 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+                <div class="resource-item">
+                    <div class="resource-header" onclick="toggleDetails(this)">
+                        <span class="resource-name">
+                            <span class="expand-icon">▶</span>
+                            Framework - FT800SDK.framework
+                        </span>
+                        <span class="resource-change change-decrease">IPA减少 -0.00 KB</span>
+                    </div>
+                    <div class="details-panel">
+                        <table class="file-table">
+                            <thead>
+                                <tr>
+                                    <th>文件路径</th>
+                                    <th>旧版本大小</th>
+                                    <th>新版本大小</th>
+                                    <th>变化</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <p style="margin-top: 10px; color: #6c757d; font-size: 0.9em;">注: Framework - FT800SDK.framework类型共有 3 个文件，仅显示变化较大的 0 个</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="timestamp">
+            报告生成时间: 2025-09-29 12:04:17
+        </div>
+    </div>
+</body>
+</html>

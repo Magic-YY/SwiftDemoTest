@@ -1,0 +1,49 @@
+%%{init: {"flowchart": {"htmlLabels": false, "curve": "basis"}, "theme": "base", "themeVariables": {"primaryColor": "#ffffff", "primaryTextColor": "#333333", "primaryBorderColor": "#333333", "lineColor": "#333333"}}}%%
+flowchart TD
+    %% 入口页面
+    A[首页试卷] -->|查看更多真题<br/>携带筛选信息| ListPage
+    C[动态工具栏-全部功能页] -->|试卷真题<br/>默认用户年级/一年级上<br/>默认数学学科| ListPage
+    
+    %% 试卷列表页
+    subgraph ListPage[试卷列表页]
+        D[搜索栏]
+        F[分类入口<br/>小学: 热门试卷、开学摸底、单元测试、课堂同步、期中真题<br/>初中: 热门试卷、开学摸底、单元测试、课堂同步、中考真题<br/>高中: 热门试卷、开学摸底、单元测试、课堂同步、高考真题]
+        H[学科筛选<br/>横向滚动选择，默认全部]
+        I[筛选按钮<br/>试卷分类、年级学期、地区、其他<br/>半弹框选择]
+        J[试卷列表数据]
+    end
+    
+    %% 试卷搜索页
+    subgraph SearchPage[试卷搜索页]
+        L[输入框<br/>输入文字+键盘确认<br/>移除全部筛选条件<br/>仅根据文字筛选]
+        M[搜索结果列表]
+        L --> M
+    end
+    
+    %% 试卷分类页
+    subgraph CategoryPage[试卷分类页]
+        N[筛选按钮<br/>地区、年份<br/>半弹框选择]
+        P[分类试卷列表]
+        N --> P
+    end
+    
+    %% 试卷详情页
+    K[试卷详情页]
+    
+    %% 页面间跳转
+    D -->|点击跳转| SearchPage
+    F -->|携带筛选信息：地区、年份、学科| CategoryPage
+    J -->|点击试卷| K
+    M -->|点击试卷| K
+    P -->|点击试卷| K
+    
+    %% 样式定义
+    classDef entryPage fill:#e1f5fe,stroke:#1976d2,stroke-width:2px,text-align:center
+    classDef pageBox fill:#f8f9fa,stroke:#333,stroke-width:2px,text-align:center
+    classDef detailPage fill:#ffebee,stroke:#d32f2f,stroke-width:2px,text-align:center
+    classDef funcBox fill:#e8f5e8,stroke:#388e3c,stroke-width:1px,text-align:center
+    
+    class A,C entryPage
+    class ListPage,SearchPage,CategoryPage pageBox
+    class K detailPage
+    class D,F,H,I,J,L,M,N,P funcBox
