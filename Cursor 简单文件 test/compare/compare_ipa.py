@@ -325,8 +325,12 @@ def generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, fi
         report_lines.append("")
         
         for file_type, type_diff, old_size, new_size in increased_types:
-            report_lines.append(f"- **{file_type}**: 增大 {format_size(type_diff)} "
-                              f"({format_size(old_size)} → {format_size(new_size)})")
+            # 计算真实大小变化（解压后）
+            real_old_size = old_by_type_uncompressed.get(file_type, 0)
+            real_new_size = new_by_type_uncompressed.get(file_type, 0)
+            real_diff = real_new_size - real_old_size
+            
+            report_lines.append(f"- **{file_type}**: IPA增大 {format_size(type_diff)}，真实增大 {format_size(real_diff)}")
         
         report_lines.append("")
         
@@ -346,7 +350,12 @@ def generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, fi
                     if len(significant_files) > 20:
                         significant_files = significant_files[:20]
                     
-                    report_lines.append(f"### 📄 {file_type} - 详细文件列表 (IPA增大: {format_size(type_diff)})")
+                    # 计算真实大小变化
+                    real_old_size = old_by_type_uncompressed.get(file_type, 0)
+                    real_new_size = new_by_type_uncompressed.get(file_type, 0)
+                    real_diff = real_new_size - real_old_size
+                    
+                    report_lines.append(f"### 📄 {file_type} - 详细文件列表 (IPA增大: {format_size(type_diff)}，真实增大: {format_size(real_diff)})")
                     report_lines.append("")
                     report_lines.append("| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |")
                     report_lines.append("|---------|------------|------------|------|------|")
@@ -404,8 +413,12 @@ def generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, fi
         report_lines.append("")
         
         for file_type, type_diff, old_size, new_size in decreased_types:
-            report_lines.append(f"- **{file_type}**: 减少 {format_size(abs(type_diff))} "
-                              f"({format_size(old_size)} → {format_size(new_size)})")
+            # 计算真实大小变化（解压后）
+            real_old_size = old_by_type_uncompressed.get(file_type, 0)
+            real_new_size = new_by_type_uncompressed.get(file_type, 0)
+            real_diff = real_new_size - real_old_size
+            
+            report_lines.append(f"- **{file_type}**: IPA减少 {format_size(abs(type_diff))}，真实减少 {format_size(abs(real_diff))}")
         
         report_lines.append("")
         
@@ -425,7 +438,12 @@ def generate_report(old_ipa_path, new_ipa_path, old_file_size, new_file_size, fi
                     if len(significant_files) > 20:
                         significant_files = significant_files[:20]
                     
-                    report_lines.append(f"### 📄 {file_type} - 详细文件列表 (IPA减少: {format_size(abs(type_diff))})")
+                    # 计算真实大小变化
+                    real_old_size = old_by_type_uncompressed.get(file_type, 0)
+                    real_new_size = new_by_type_uncompressed.get(file_type, 0)
+                    real_diff = real_new_size - real_old_size
+                    
+                    report_lines.append(f"### 📄 {file_type} - 详细文件列表 (IPA减少: {format_size(abs(type_diff))}，真实减少: {format_size(abs(real_diff))})")
                     report_lines.append("")
                     report_lines.append("| 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |")
                     report_lines.append("|---------|------------|------------|------|------|")
@@ -798,15 +816,14 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
                     <span class="stat-number {'increase' if file_size_diff > 0 else 'decrease'}">
                         {'+' if file_size_diff > 0 else ''}{format_size(file_size_diff)}
                     </span>
-                    <span>IPA文件变化</span>
+                    <span>IPA体积变化</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">
-                        {format_size(total_compressed_diff)}
+                    <span class="stat-number {'increase' if size_diff > 0 else 'decrease'}">
+                        {'+' if size_diff > 0 else ''}{format_size(size_diff)}
                     </span>
-                    <span>各类型变化总和</span>
+                    <span>真实体积变化</span>
                 </div>
-                {f'<div class="stat-item"><span class="stat-number">{format_size(abs(metadata_diff))}</span><span>ZIP头/元数据差异</span></div>' if abs(metadata_diff) > 1000 else ''}
             </div>
         </div>
 
@@ -819,6 +836,11 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
     
     # 生成可展开的增大资源类型
     for file_type, type_diff, old_size, new_size in increased_types:
+        # 计算真实大小变化
+        real_old_size = old_by_type_uncompressed.get(file_type, 0)
+        real_new_size = new_by_type_uncompressed.get(file_type, 0)
+        real_diff = real_new_size - real_old_size
+        
         # 获取该类型的详细文件列表
         type_files = files_by_type.get(file_type, [])
         significant_files = [f for f in type_files if abs(f['change']) >= 1024 or f['status'] in ['新增', '删除']]
@@ -833,7 +855,7 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
                             <span class="expand-icon">▶</span>
                             {file_type}
                         </span>
-                        <span class="resource-change change-increase">IPA增加 +{format_size(type_diff)}</span>
+                        <span class="resource-change change-increase">IPA增加 +{format_size(type_diff)}，真实增加 +{format_size(real_diff)}</span>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">
@@ -923,6 +945,11 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
         
         # 生成可展开的减少资源类型
         for file_type, type_diff, old_size, new_size in decreased_types:
+            # 计算真实大小变化
+            real_old_size = old_by_type_uncompressed.get(file_type, 0)
+            real_new_size = new_by_type_uncompressed.get(file_type, 0)
+            real_diff = real_new_size - real_old_size
+            
             type_files = files_by_type.get(file_type, [])
             significant_files = [f for f in type_files if abs(f['change']) >= 1024 or f['status'] in ['新增', '删除']]
             
@@ -936,7 +963,7 @@ def generate_html_report(old_ipa_path, new_ipa_path, old_file_size, new_file_siz
                             <span class="expand-icon">▶</span>
                             {file_type}
                         </span>
-                        <span class="resource-change change-decrease">IPA减少 -{format_size(abs(type_diff))}</span>
+                        <span class="resource-change change-decrease">IPA减少 -{format_size(abs(type_diff))}，真实减少 -{format_size(abs(real_diff))}</span>
                     </div>
                     <div class="details-panel">
                         <table class="file-table">

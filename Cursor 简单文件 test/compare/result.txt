@@ -19,18 +19,18 @@
 
 *按增大幅度由大到小排序：*
 
-- **Framework - Flutter.framework**: 增大 4.74 MB (0.00 KB → 4.74 MB)
-- **Framework - App.framework**: 增大 2.60 MB (0.00 KB → 2.60 MB)
-- **其他文件**: 增大 186.21 KB (47.73 MB → 47.92 MB)
-- **Framework - sqflite.framework**: 增大 66.46 KB (0.00 KB → 66.46 KB)
-- **Framework - image_picker_ios.framework**: 增大 45.62 KB (0.00 KB → 45.62 KB)
-- **Framework - flutter_boost.framework**: 增大 43.15 KB (0.00 KB → 43.15 KB)
-- **Framework - path_provider.framework**: 增大 31.76 KB (0.00 KB → 31.76 KB)
-- **Framework - fluttertoast.framework**: 增大 27.98 KB (0.00 KB → 27.98 KB)
-- **Framework - flutter_keyboard_visib....framework**: 增大 11.08 KB (0.00 KB → 11.08 KB)
-- **配置文件**: 增大 0.74 KB (206.03 KB → 206.77 KB)
+- **Framework - Flutter.framework**: IPA增大 4.74 MB，真实增大 10.66 MB
+- **Framework - App.framework**: IPA增大 2.60 MB，真实增大 6.41 MB
+- **其他文件**: IPA增大 186.21 KB，真实增大 315.29 KB
+- **Framework - sqflite.framework**: IPA增大 66.46 KB，真实增大 273.61 KB
+- **Framework - image_picker_ios.framework**: IPA增大 45.62 KB，真实增大 204.31 KB
+- **Framework - flutter_boost.framework**: IPA增大 43.15 KB，真实增大 205.60 KB
+- **Framework - path_provider.framework**: IPA增大 31.76 KB，真实增大 140.34 KB
+- **Framework - fluttertoast.framework**: IPA增大 27.98 KB，真实增大 124.26 KB
+- **Framework - flutter_keyboard_visib....framework**: IPA增大 11.08 KB，真实增大 80.55 KB
+- **配置文件**: IPA增大 0.74 KB，真实增大 1.52 KB
 
-### 📄 Framework - Flutter.framework - 详细文件列表 (IPA增大: 4.74 MB)
+### 📄 Framework - Flutter.framework - 详细文件列表 (IPA增大: 4.74 MB，真实增大: 10.66 MB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -40,7 +40,7 @@
 | Flutter.framework/Info.plist | - | 1.03 KB | +1.03 KB | 新增 |
 | Flutter.framework/PrivacyInfo.xcprivacy | - | 0.84 KB | +0.84 KB | 新增 |
 
-### 📄 Framework - App.framework - 详细文件列表 (IPA增大: 2.60 MB)
+### 📄 Framework - App.framework - 详细文件列表 (IPA增大: 2.60 MB，真实增大: 6.41 MB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -48,7 +48,7 @@
 | App.framework/...ignature/CodeResources | - | 6.78 KB | +6.78 KB | 新增 |
 | App.framework/Info.plist | - | 0.77 KB | +0.77 KB | 新增 |
 
-### 📄 其他文件 - 详细文件列表 (IPA增大: 186.21 KB)
+### 📄 其他文件 - 详细文件列表 (IPA增大: 186.21 KB，真实增大: 315.29 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -59,7 +59,7 @@
 
 *注: 其他文件类型共有 73 个文件，仅显示变化较大的 4 个*
 
-### 📄 Framework - sqflite.framework - 详细文件列表 (IPA增大: 66.46 KB)
+### 📄 Framework - sqflite.framework - 详细文件列表 (IPA增大: 66.46 KB，真实增大: 273.61 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -67,7 +67,7 @@
 | sqflite_darwin.framework/...ignature/CodeResources | - | 2.36 KB | +2.36 KB | 新增 |
 | sqflite_darwin.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 Framework - image_picker_ios.framework - 详细文件列表 (IPA增大: 45.62 KB)
+### 📄 Framework - image_picker_ios.framework - 详细文件列表 (IPA增大: 45.62 KB，真实增大: 204.31 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -75,7 +75,7 @@
 | image_picker_ios.framework/...ignature/CodeResources | - | 2.37 KB | +2.37 KB | 新增 |
 | image_picker_ios.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 Framework - flutter_boost.framework - 详细文件列表 (IPA增大: 43.15 KB)
+### 📄 Framework - flutter_boost.framework - 详细文件列表 (IPA增大: 43.15 KB，真实增大: 205.60 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -83,7 +83,7 @@
 | flutter_boost.framework/...ignature/CodeResources | - | 1.80 KB | +1.80 KB | 新增 |
 | flutter_boost.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 Framework - path_provider.framework - 详细文件列表 (IPA增大: 31.76 KB)
+### 📄 Framework - path_provider.framework - 详细文件列表 (IPA增大: 31.76 KB，真实增大: 140.34 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -91,7 +91,7 @@
 | path_provider_foundation.framework/...ignature/CodeResources | - | 2.40 KB | +2.40 KB | 新增 |
 | path_provider_foundation.framework/Info.plist | - | 0.82 KB | +0.82 KB | 新增 |
 
-### 📄 Framework - fluttertoast.framework - 详细文件列表 (IPA增大: 27.98 KB)
+### 📄 Framework - fluttertoast.framework - 详细文件列表 (IPA增大: 27.98 KB，真实增大: 124.26 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -99,7 +99,7 @@
 | fluttertoast.framework/...ignature/CodeResources | - | 2.35 KB | +2.35 KB | 新增 |
 | fluttertoast.framework/Info.plist | - | 0.80 KB | +0.80 KB | 新增 |
 
-### 📄 Framework - flutter_keyboard_visib....framework - 详细文件列表 (IPA增大: 11.08 KB)
+### 📄 Framework - flutter_keyboard_visib....framework - 详细文件列表 (IPA增大: 11.08 KB，真实增大: 80.55 KB)
 
 | 文件路径 | 旧版本大小 | 新版本大小 | 变化 | 状态 |
 |---------|------------|------------|------|------|
@@ -113,10 +113,10 @@
 
 *按减少幅度由大到小排序：*
 
-- **Framework - sqlcipher.framework**: 减少 0.01 KB (492.61 KB → 492.61 KB)
-- **Framework - WCDBSwift.framework**: 减少 0.01 KB (400.55 KB → 400.55 KB)
-- **Framework - PLPrinterSDK.framework**: 减少 0.00 KB (158.60 KB → 158.59 KB)
-- **Framework - sqliterk.framework**: 减少 0.00 KB (32.75 KB → 32.75 KB)
-- **Framework - libpag.framework**: 减少 0.00 KB (0.85 MB → 0.85 MB)
-- **Framework - FT800SDK.framework**: 减少 0.00 KB (1.26 MB → 1.26 MB)
-- **Framework - WewinPrintLib.framework**: 减少 0.00 KB (253.19 KB → 253.19 KB)
+- **Framework - sqlcipher.framework**: IPA减少 0.01 KB，真实减少 0.00 KB
+- **Framework - WCDBSwift.framework**: IPA减少 0.01 KB，真实减少 0.00 KB
+- **Framework - sqliterk.framework**: IPA减少 0.00 KB，真实减少 0.00 KB
+- **Framework - PLPrinterSDK.framework**: IPA减少 0.00 KB，真实减少 0.00 KB
+- **Framework - libpag.framework**: IPA减少 0.00 KB，真实减少 0.00 KB
+- **Framework - FT800SDK.framework**: IPA减少 0.00 KB，真实减少 0.00 KB
+- **Framework - WewinPrintLib.framework**: IPA减少 0.00 KB，真实减少 0.00 KB
