@@ -27,6 +27,7 @@
 		D3B225FE2D069C5D009130F6 /* ViewController+Cycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */; };
 		D3B226002D06BFCD009130F6 /* ViewController+GroupTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B225FF2D06BFCD009130F6 /* ViewController+GroupTask.swift */; };
 		D3B226022D06C00A009130F6 /* ViewController+GCD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B226012D06C00A009130F6 /* ViewController+GCD.swift */; };
+		D3E1DE8C2EA1CC300097439E /* WriteDataDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E1DE8B2EA1CC300097439E /* WriteDataDemoViewController.swift */; };
 		D3E9C1402C6C5864007937D1 /* AViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C13F2C6C5864007937D1 /* AViewController.swift */; };
 		D3E9C1422C6C5875007937D1 /* BViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C1412C6C5875007937D1 /* BViewController.swift */; };
 		D3E9C1462C6C87AD007937D1 /* PresentViewControllerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E9C1452C6C87AD007937D1 /* PresentViewControllerAnimation.swift */; };
@@ -58,6 +59,7 @@
 		D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Cycle.swift"; sourceTree = "<group>"; };
 		D3B225FF2D06BFCD009130F6 /* ViewController+GroupTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+GroupTask.swift"; sourceTree = "<group>"; };
 		D3B226012D06C00A009130F6 /* ViewController+GCD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+GCD.swift"; sourceTree = "<group>"; };
+		D3E1DE8B2EA1CC300097439E /* WriteDataDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteDataDemoViewController.swift; sourceTree = "<group>"; };
 		D3E9C13F2C6C5864007937D1 /* AViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AViewController.swift; sourceTree = "<group>"; };
 		D3E9C1412C6C5875007937D1 /* BViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BViewController.swift; sourceTree = "<group>"; };
 		D3E9C1452C6C87AD007937D1 /* PresentViewControllerAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentViewControllerAnimation.swift; sourceTree = "<group>"; };
@@ -90,7 +92,6 @@
 				8C46D488595D480C8FBB82CF /* Pods-SwiftTestDemo.debug.xcconfig */,
 				BC65AD45F98186E982930459 /* Pods-SwiftTestDemo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -115,8 +116,8 @@
 		D37A86312BDDF63F000181B8 /* SwiftTestDemo */ = {
 			isa = PBXGroup;
 			children = (
-				D36D57D72E2F2D0D0013592E /* CEVideoCacheManager.swift */,
-				D36D57D82E2F2D0D0013592E /* VideoCacheExample.swift */,
+				D3E1DE8A2EA1CC170097439E /* WriteData */,
+				D3E1DE892EA1CC080097439E /* VideoCache */,
 				D3E9C13E2C6C584F007937D1 /* Animation */,
 				D38BA1C32C1A852A00346277 /* 轮播 */,
 				D3F36BD92C08271400400BE9 /* Operation */,
@@ -144,6 +145,23 @@
 				D3B225FD2D069C5D009130F6 /* ViewController+Cycle.swift */,
 			);
 			path = "轮播";
+			sourceTree = "<group>";
+		};
+		D3E1DE892EA1CC080097439E /* VideoCache */ = {
+			isa = PBXGroup;
+			children = (
+				D36D57D72E2F2D0D0013592E /* CEVideoCacheManager.swift */,
+				D36D57D82E2F2D0D0013592E /* VideoCacheExample.swift */,
+			);
+			path = VideoCache;
+			sourceTree = "<group>";
+		};
+		D3E1DE8A2EA1CC170097439E /* WriteData */ = {
+			isa = PBXGroup;
+			children = (
+				D3E1DE8B2EA1CC300097439E /* WriteDataDemoViewController.swift */,
+			);
+			path = WriteData;
 			sourceTree = "<group>";
 		};
 		D3E9C13E2C6C584F007937D1 /* Animation */ = {
@@ -272,6 +290,7 @@
 				D37A86372BDDF63F000181B8 /* ViewController.swift in Sources */,
 				D3B226022D06C00A009130F6 /* ViewController+GCD.swift in Sources */,
 				D3E9C1422C6C5875007937D1 /* BViewController.swift in Sources */,
+				D3E1DE8C2EA1CC300097439E /* WriteDataDemoViewController.swift in Sources */,
 				D38BA1CF2C1AD6CB00346277 /* CycleCollectionViewCell.swift in Sources */,
 				D38BA1C52C1A85C000346277 /* CECycleScrollView.swift in Sources */,
 				D36D57D92E2F2D0D0013592E /* CEVideoCacheManager.swift in Sources */,
