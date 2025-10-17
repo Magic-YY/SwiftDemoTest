@@ -212,7 +212,7 @@ class WriteDataDemoViewController: UIViewController {
     
     /// 清理所有测试文件
     @objc private func cleanupAllTestFiles() {
-        print("\n🗑️ 开始清理所有测试文件...")
+        print("\n🗑️ 开始清理所有测试文件和目录...")
         print("============================================================")
         
         let testFiles = [
@@ -231,13 +231,60 @@ class WriteDataDemoViewController: UIViewController {
             }
         }
         
+        // 清理整个 dataFile 目录
+        let directoryResult = cleanupDataFileDirectory()
+        
         print("============================================================")
-        print("✅ 清理完成，共清理 \(cleanedCount) 个文件\n")
+        print("✅ 清理完成，共清理 \(cleanedCount) 个文件")
+        if directoryResult {
+            print("✅ 已删除 dataFile 目录\n")
+        } else {
+            print("⚠️ dataFile 目录清理失败或不存在\n")
+        }
         
         // 显示提示
-        let alert = UIAlertController(title: "清理完成", message: "已清理 \(cleanedCount) 个测试文件", preferredStyle: .alert)
+        let message = directoryResult 
+            ? "已清理 \(cleanedCount) 个测试文件并删除 dataFile 目录" 
+            : "已清理 \(cleanedCount) 个测试文件"
+        let alert = UIAlertController(title: "清理完成", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "确定", style: .default))
         present(alert, animated: true)
+    }
+    
+    /// 清理整个 dataFile 目录
+    /// - Returns: 是否清理成功
+    private func cleanupDataFileDirectory() -> Bool {
+        let fileManager = FileManager.default
+        
+        // 获取 Documents 目录
+        guard let documentsPath = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first?.path else {
+            print("   ❌ 获取 Documents 目录失败")
+            return false
+        }
+        
+        // dataFile 目录路径
+        let dataFilePath = (documentsPath as NSString).appendingPathComponent("dataFile")
+        
+        // 检查目录是否存在
+        var isDirectory: ObjCBool = false
+        if fileManager.fileExists(atPath: dataFilePath, isDirectory: &isDirectory) {
+            if isDirectory.boolValue {
+                do {
+                    try fileManager.removeItem(atPath: dataFilePath)
+                    print("   🗂️ 已删除目录: \(dataFilePath)")
+                    return true
+                } catch {
+                    print("   ❌ 删除目录失败: \(error.localizedDescription)")
+                    return false
+                }
+            } else {
+                print("   ⚠️ dataFile 不是目录")
+                return false
+            }
+        } else {
+            print("   ℹ️ dataFile 目录不存在")
+            return false
+        }
     }
     
     // MARK: - 主测试入口
